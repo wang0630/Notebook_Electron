@@ -4,7 +4,7 @@
   "description": "Notebook made with Electron",
   "main": "main.js",
   "scripts": {
-    "start": "npm-run-all --parallel bundle serve",
+    "start": "npm-run-all --parallel build:production serve",
     "bundle": "NODE_ENV=development webpack --mode development",
     "build:production": "NODE_ENV=production webpack --mode production",
     "serve": "electron .",
@@ -41,7 +41,9 @@
     "file-loader": "^3.0.1",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.6.0",
+    "node-sass": "^4.12.0",
     "npm-run-all": "^4.1.5",
+    "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.31.0",
     "webpack-cli": "^3.3.2",
