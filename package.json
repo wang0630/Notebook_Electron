@@ -6,6 +6,7 @@
   "scripts": {
     "start": "npm-run-all --parallel build:production serve",
     "bundle": "cross-env NODE_ENV=development webpack --mode development",
+    "build:production": "cross-env NODE_ENV=production webpack --mode production",
     "serve": "electron .",
     "lint": "eslint"
   },
