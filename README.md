@@ -1,9 +1,15 @@
 # Notebook_Electron
 Notebook made with Electron, React, Sass
 
-# Install everything when running the project for the first time
+## Requirements
+[Node.js](https://nodejs.org/en/)
+
+## Install everything when running the project for the first time
+```bash
 npm install
+```
 
-# Run the project
+## Run the project
+```bash
 npm start
-
+```
