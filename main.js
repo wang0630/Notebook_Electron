@@ -15,5 +15,7 @@ app.on('ready', () => {
       nodeIntegration: true,
     },
   });
+  // Open the dev window
+  mainWindow.webContents.openDevTools();
   mainWindow.loadURL(`file://${__dirname}/build/index.html`);
 });
