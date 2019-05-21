@@ -4,6 +4,7 @@
   "rules": {
     "comma-dangle": "off",
     "import/no-extraneous-dependencies": "off",
+    "linebreak-style": "off",
     "no-undef": "off",
     "react/jsx-filename-extension": "off",
     "react/prop-types": "off"
