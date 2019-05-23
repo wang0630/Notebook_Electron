@@ -1,16 +1,26 @@
+@mixin my-button($color) {
+  background-color: $color;
+  height: 80px;
+  width: 80px;
+  outline: none;
+  border-radius: 50%;
+  border: 0;
+}
+
+
 .components-bar {
-  background-color: salmon;
+  background-color: rgb(187, 69, 56);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  // align-items: 
+  align-items: center;
   padding: 20px;
 }
 
 .new-dir {
-  background-color: aqua;
+  @include my-button(aqua);
 }
 
 .new-note {
-  background-color: green;
+  @include my-button(red);
 }
