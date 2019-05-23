@@ -35,6 +35,7 @@ export default class Playground extends React.Component {
           cbWidth={this.props.cbWidth}
           rightBound={this.nodeRef.current.offsetWidth}
           bottomBound={this.nodeRef.current.offsetHeight}
+          compType={this.props.compType}
         />
       );
       // Update the state

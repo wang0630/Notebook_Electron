@@ -1,5 +1,6 @@
 import React from 'react';
-import { Icon } from 'antd';
+import { Icon, Input } from 'antd';
+import componentsMapping from '../../constant/components-constant';
 import './draggable.scss';
 
 export default class Draggable extends React.Component {
@@ -107,6 +108,7 @@ export default class Draggable extends React.Component {
       left: `${this.state.x}px`,
       top: `${this.state.y}px`
     };
+    const mapping = componentsMapping[this.props.compType];
     return (
       <div
         className="draggable"
@@ -118,10 +120,18 @@ export default class Draggable extends React.Component {
         onMouseLeave={this.onMouseLeave}
       >
         <Icon
-          type="folder-add"
+          type={mapping.type}
           style={{
             fontSize: '70px',
-            color: '#21946e'
+            color: mapping.color
+          }}
+        />
+        <Input
+          placeholder="Enter the name"
+          size="small"
+          onPressEnter={() => console.log('enter')}
+          onChange={(e) => {
+            ;
           }}
         />
       </div>

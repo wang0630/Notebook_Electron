@@ -1,8 +1,10 @@
 .draggable {
-  height: 100px;
-  width: 100px;
+  height: 150px;
+  width: 150px;
+  padding: 20px;
   display: flex;
-  border: 5px solid #21946e;
+  flex-direction: column;
+  // border: 5px solid #21946e;
   border-radius: 50%;
   justify-content: center;
   align-items: center;

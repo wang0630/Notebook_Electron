@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Icon } from 'antd';
+import { Button } from 'antd';
 import './components-bar.scss';
 
 const componentsList = [
@@ -31,7 +31,6 @@ export default class ComponentsBar extends React.Component {
   createButtons() {
     return componentsList.map(item => (
       <Button
-        // ghost
         type="primary"
         onClick={() => {
           this.props.createDraggable(item.value, item.name);
