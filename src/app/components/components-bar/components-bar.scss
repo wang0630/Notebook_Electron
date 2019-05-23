@@ -1,5 +1,10 @@
 .components-bar {
   background-color: salmon;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  // align-items: 
+  padding: 20px;
 }
 
 .new-dir {

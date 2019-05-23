@@ -1,34 +1,55 @@
 import React from 'react';
 import './components-bar.scss';
 
-// const componentsList = ['new-dir', 'new-note'];
+const componentsList = [
+  {
+    value: 'new-dir',
+    name: 'New directory'
+  },
+  {
+    value: 'new-note',
+    name: 'New Note'
+  }
+];
 
-class ComponentsBar extends React.Component {
+export default class ComponentsBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       show: 'true',
     };
+    this.nodeRef = React.createRef();
+    this.createButtons = this.createButtons.bind(this);
+  }
+
+  componentDidMount() {
+    // Pass the width to main-layout
+    this.props.getComponentBarWidth(this.nodeRef.current.offsetWidth);
+  }
+
+  createButtons() {
+    return componentsList.map(item => (
+      <button
+        type="button"
+        // key={`button-${index}`}
+        onClick={() => {
+          this.props.createDraggable(item.value, item.name);
+        }}
+      >
+        {item.name}
+      </button>
+    ));
   }
 
   render() {
     return (
       this.state.show
         ? (
-          <div className="components-bar">
-            <button
-              type="button"
-              onClick={() => {
-                this.props.createDraggable('dir', 'new-dir');
-              }}
-            >
-              New Directory
-            </button>
+          <div className="components-bar" ref={this.nodeRef}>
+            { this.createButtons() }
           </div>
         )
         : null
     );
   }
 }
-
-export default ComponentsBar;

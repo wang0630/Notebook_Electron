@@ -9,6 +9,11 @@ export default class Playground extends React.Component {
       exsistingComps: [],
     };
     this.componentCount = 0;
+    this.nodeRef = React.createRef();
+  }
+
+  componentDidMount() {
+    console.log(this.nodeRef.current.getBoundingClientRect().right);
   }
 
   componentDidUpdate(prevProps, prevStat) {
@@ -25,7 +30,14 @@ export default class Playground extends React.Component {
         id: this.componentCount
       };
       // Create the init style of the component
-      comp.c = <Draggable id={this.componentCount} />;
+      comp.c = (
+        <Draggable
+          id={this.componentCount}
+          cbWidth={this.props.cbWidth}
+          rightBound={this.nodeRef.current.offsetWidth}
+          bottomBound={this.nodeRef.current.offsetHeight}
+        />
+      );
       // Update the state
       this.setState({
         exsistingComps: [...prevStat.exsistingComps, comp]
@@ -40,7 +52,7 @@ export default class Playground extends React.Component {
     // Extract the exsisting components
     const r = this.state.exsistingComps.map(comp => comp.c);
     return (
-      <section className="playground">
+      <section className="playground" ref={this.nodeRef}>
         { r }
       </section>
     );
