@@ -7,6 +7,7 @@
  * here by importing from '../../helpers/fileOperation'.
  */
 
+const fs = require('fs-extra');
 /**
  * A function that creates a given new directory.
  * If the directory already exists, nothing will be done.
@@ -15,7 +16,6 @@
  *  The directory to be created. The path should start
  *  from root of this project.
  */
-const fs = require('fs-extra');
 
 export function createDir(dir) {
   // const fs = require('fs-extra');

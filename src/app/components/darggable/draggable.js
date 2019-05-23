@@ -1,5 +1,6 @@
 import React from 'react';
 import { Icon, Input } from 'antd';
+import { createDir } from '../../helpers/fileOperation';
 import componentsMapping from '../../constant/components-constant';
 import './draggable.scss';
 
@@ -12,11 +13,14 @@ export default class Draggable extends React.Component {
       y: 300,
       relx: 0,
       rely: 0,
+      isNamed: false,
+      name: '',
     };
     this.onMouseUp = this.onMouseUp.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
+    this.updateName = this.updateName.bind(this);
     this.nodeRef = React.createRef();
     this.id = this.props.id;
   }
@@ -28,6 +32,19 @@ export default class Draggable extends React.Component {
     //   topBound: this.nodeRef.offsetTop,
     //   // downBound: this.nodeRef.offsetDown,
     // });
+  }
+
+  updateName(newName) {
+    this.setState({
+      isNamed: true,
+      name: newName,
+    });
+    if (this.props.compType === 'new-dir') {
+      createDir(`./savefiles/${newName}`);
+    }
+    // else if (this.props.compType === 'new-note') {
+    //   // just open text area and save when close
+    // }
   }
 
   onMouseDown(e) {
@@ -45,7 +62,7 @@ export default class Draggable extends React.Component {
   onMouseMove(e) {
     if (this.state.beingDragged) {
       e.persist();
-      console.log(`offy: ${this.nodeRef.current.offsetTop}, px: ${e.pageX}, py: ${e.pageY} off: ${this.nodeRef.current.offsetLeft}`); 
+      console.log(`offy: ${this.nodeRef.current.offsetTop}, px: ${e.pageX}, py: ${e.pageY} off: ${this.nodeRef.current.offsetLeft}`);
       this.setState((prevStat) => {
         let currentX = e.pageX - this.props.cbWidth - prevStat.relx;
         let currentY = e.pageY - prevStat.rely;
@@ -126,14 +143,21 @@ export default class Draggable extends React.Component {
             color: mapping.color
           }}
         />
-        <Input
-          placeholder="Enter the name"
-          size="small"
-          onPressEnter={() => console.log('enter')}
-          onChange={(e) => {
-            ;
-          }}
-        />
+        {
+          this.state.isNamed
+            ? (
+              <span>
+                { this.state.name }
+              </span>
+            )
+            : (
+              <Input
+                placeholder="Enter the name"
+                size="small"
+                onPressEnter={e => this.updateName(e.target.value)}
+              />
+            )
+        }
       </div>
     );
   }
