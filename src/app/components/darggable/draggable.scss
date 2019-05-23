@@ -1,5 +1,9 @@
 .draggable {
-  height: 70px;
-  width: 70px;
-  background-color: purple;
+  height: 100px;
+  width: 100px;
+  display: flex;
+  border: 5px solid #21946e;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
 }

@@ -18,7 +18,6 @@ export default class Playground extends React.Component {
 
   componentDidUpdate(prevProps, prevStat) {
     if (this.props.shouldCreateDraggable && !prevProps.shouldCreateDraggable) {
-      console.log('here in update');
       // Create a new element
       const comp = {};
       // Create the props map

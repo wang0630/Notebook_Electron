@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon } from 'antd';
 import './draggable.scss';
 
 export default class Draggable extends React.Component {
@@ -115,7 +116,15 @@ export default class Draggable extends React.Component {
         onMouseMove={this.onMouseMove}
         onMouseUp={this.onMouseUp}
         onMouseLeave={this.onMouseLeave}
-      />
+      >
+        <Icon
+          type="folder-add"
+          style={{
+            fontSize: '70px',
+            color: '#21946e'
+          }}
+        />
+      </div>
     );
   }
 }

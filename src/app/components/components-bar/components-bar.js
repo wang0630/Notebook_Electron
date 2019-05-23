@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, Icon } from 'antd';
 import './components-bar.scss';
 
 const componentsList = [
