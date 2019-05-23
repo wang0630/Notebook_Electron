@@ -1,44 +1,56 @@
 import React from 'react';
-import { createDir, writeFile, saveLayout, loadLayout, moveFile } from '../../helpers/fileOperation';
+import { Button } from 'antd';
+import './components-bar.scss';
+
+const componentsList = [
+  {
+    value: 'new-dir',
+    name: 'New directory'
+  },
+  {
+    value: 'new-note',
+    name: 'New Note'
+  }
+];
 
 export default class ComponentsBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       show: 'true',
-      test: [{type: 'Dir', x: 1, y:2}, {type: 'file', x:3, y:4}]
     };
+    this.nodeRef = React.createRef();
+    this.createButtons = this.createButtons.bind(this);
+  }
+
+  componentDidMount() {
+    // Pass the width to main-layout
+    this.props.getComponentBarWidth(this.nodeRef.current.offsetWidth);
+  }
+
+  createButtons() {
+    return componentsList.map(item => (
+      <Button
+        // ghost
+        type="primary"
+        onClick={() => {
+          this.props.createDraggable(item.value, item.name);
+        }}
+      >
+        {item.name}
+      </Button>
+    ));
   }
 
   render() {
     return (
-      <div className="components-bar">
-        <h1> CBar </h1>
-        <button
-          type="button"
-          onClick={ () => createDir('./savefiles/temp') }
-        >
-          Create dir
-        </button>
-        <button
-          type="button"
-          onClick={ () => saveLayout(this.state.test) }
-        >
-          Save layout
-        </button>
-        <button
-          type="button"
-          onClick={ () => loadLayout() }
-        >
-          Load layout
-        </button>
-        <button
-          type="button"
-          onClick={ () => moveFile('./savefiles/window-layout.json', './savefiles/tmp/window-layout.json') }
-        >
-          Test move
-        </button>
-      </div>
+      this.state.show
+        ? (
+          <div className="components-bar" ref={this.nodeRef}>
+            { this.createButtons() }
+          </div>
+        )
+        : null
     );
   }
 }
