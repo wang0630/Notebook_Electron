@@ -14,7 +14,8 @@ export default class Draggable extends React.Component {
       relx: 0,
       rely: 0,
       isNamed: false,
-      name: '',
+      name: 'Change this name',
+      clicked: false,
     };
     this.onMouseUp = this.onMouseUp.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
@@ -50,8 +51,8 @@ export default class Draggable extends React.Component {
   onMouseDown(e) {
     // Not left button
     e.persist();
-    if (e.button !== 0) return;
-    // console.log('In draggable mousedown ', e.pageX - 300 - this.props.cbWidth, e.pageX);
+    if (e.button !== 0 || e.target.tagName === 'INPUT') return;
+    console.log('In draggable mousedown');
     this.setState(prevStat => ({
       beingDragged: true,
       relx: e.pageX - prevStat.x - this.props.cbWidth,
@@ -128,13 +129,31 @@ export default class Draggable extends React.Component {
     const mapping = componentsMapping[this.props.compType];
     return (
       <div
-        className="draggable"
+        className={`draggable ${this.state.clicked ? 'draggable-clicked' : ''}`}
+        // Add tab index to make this div focusable
+        tabIndex={-1}
         style={style}
         ref={this.nodeRef}
         onMouseDown={this.onMouseDown}
         onMouseMove={this.onMouseMove}
         onMouseUp={this.onMouseUp}
         onMouseLeave={this.onMouseLeave}
+        onFocus={(e) => {
+          // Don't get focus when input is focused
+          if (e.target.tagName !== 'INPUT') {
+            this.setState({ clicked: true });
+          }
+        }}
+        onBlur={() => { this.setState({ clicked: false }); }}
+        onKeyPress={(e) => {
+          // If user press enter and the div is clicked
+          if (e.key === 'Enter' && this.state.clicked) {
+            this.setState({
+              clicked: false,
+              isNamed: false,
+            });
+          }
+        }}
       >
         <Icon
           type={mapping.type}
@@ -146,13 +165,14 @@ export default class Draggable extends React.Component {
         {
           this.state.isNamed
             ? (
-              <span>
+              <span className="draggable__span">
                 { this.state.name }
               </span>
             )
             : (
               <Input
                 placeholder="Enter the name"
+                defaultValue={this.state.name}
                 size="small"
                 onPressEnter={e => this.updateName(e.target.value)}
               />
