@@ -50,7 +50,6 @@ module.exports = {
       },
     ],
   },
-
   plugins: [
     htmlPlugin,
     miniCssPlugin

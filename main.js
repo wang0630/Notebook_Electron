@@ -2,7 +2,9 @@
 const { app, BrowserWindow } = require('electron');
 
 // Let electron reloads by itself when webpack watches changes in ./app/
-require('electron-reload')(__dirname);
+// webpack compiles a new build files every time when files are changed
+// electron-reload only watch the build directory for hot loading
+require('electron-reload')(`${__dirname}/build`);
 
 // To avoid being garbage collected
 let mainWindow;
