@@ -15,10 +15,12 @@ export default class Playground extends React.Component {
 
   componentDidMount() {
     // console.log(this.nodeRef.current.getBoundingClientRect().right);
+    // console.log(window);
+    window.addEventListener('beforeunload', this.onBeforeUnload);
   }
 
   componentWillUnmount() {
-    // call ur save layout here before playground is unmount
+    window.removeEventListener('beforeunload', this.onBeforeUnload);
   }
 
   componentDidUpdate(prevProps, prevStat) {
@@ -52,6 +54,10 @@ export default class Playground extends React.Component {
         this.componentCount += 1;
       });
     }
+  }
+
+  onBeforeUnload() {
+    // call ur save layout here before playground is unmount
   }
 
   // It is called when onMouseUp event is fired in draggable
