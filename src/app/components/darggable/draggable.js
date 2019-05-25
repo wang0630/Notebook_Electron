@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon, Input } from 'antd';
-import { createDir } from '../../helpers/fileOperation';
+import { createDir, renameFile } from '../../helpers/fileOperation';
 import componentsMapping from '../../constant/components-constant';
 import './draggable.scss';
 
@@ -14,6 +14,7 @@ export default class Draggable extends React.Component {
       relx: 0,
       rely: 0,
       isNamed: false,
+      toRename: false,
       name: 'Change this name',
       clicked: false,
     };
@@ -36,6 +37,19 @@ export default class Draggable extends React.Component {
   }
 
   updateName(newName) {
+    // The file already exists, just rename the old one.
+    if (this.state.toRename) {
+      console.log(`change name from ${this.state.name} to ${newName}`);
+      renameFile(`./savefiles/${this.state.name}`, `./savefiles/${newName}`);
+      this.setState({
+        isNamed: true,
+        name: newName,
+        toRename: false,
+      });
+      return;
+    }
+
+    // The file does not exist, create a new one with the given name.
     this.setState({
       isNamed: true,
       name: newName,
@@ -151,6 +165,7 @@ export default class Draggable extends React.Component {
             this.setState({
               clicked: false,
               isNamed: false,
+              toRename: true,
             });
           }
         }}

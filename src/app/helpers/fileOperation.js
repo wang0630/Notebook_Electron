@@ -90,10 +90,10 @@ export function loadLayout() {
  * the destination directory, the user can
  * choose whether to overwrite it or not.
  *
- * @param {array} srcPath
+ * @param {string} srcPath
  *  The source path of the file. The path
  *  should start from root of this project.
- * @param {array} destPath
+ * @param {string} destPath
  *  The destination path of the file. The path
  *  should start from root of this project.
  */
@@ -117,5 +117,25 @@ export function moveFile(srcPath, destPath) {
     }
   } catch (err) {
     console.error(err);
+  }
+}
+
+/**
+ * A function that renames an existing
+ * file or folder.
+ *
+ * @param {string} oldPath
+ *  The source path of the file. The path
+ *  should start from root of this project.
+ * @param {string} newPath
+ *  The destination path of the file. The path
+ *  should start from root of this project.
+ */
+export function renameFile(oldPath, newPath) {
+  // const fs = require('fs-extra');
+  try {
+    fs.renameSync(oldPath, newPath);
+  } catch (e) {
+    alert('[WARNING] Failed to save the file! Try again later.');
   }
 }
