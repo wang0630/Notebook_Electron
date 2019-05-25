@@ -8,6 +8,7 @@
  */
 
 const fs = require('fs-extra');
+
 /**
  * A function that creates a given new directory.
  * If the directory already exists, nothing will be done.
@@ -16,7 +17,6 @@ const fs = require('fs-extra');
  *  The directory to be created. The path should start
  *  from root of this project.
  */
-
 export function createDir(dir) {
   // const fs = require('fs-extra');
   try {
@@ -55,8 +55,10 @@ export function saveFile(filename, content) {
  */
 export function saveLayout(componentArr) {
   // const fs = require('fs-extra');
+  console.log('save layout');
   try { fs.writeFileSync('./savefiles/window-layout.json', JSON.stringify(componentArr), 'utf-8'); }
   catch (e) { alert('[WARNING] Failed saving window layout!'); }
+  alert('Layout saved...');
 }
 
 /**

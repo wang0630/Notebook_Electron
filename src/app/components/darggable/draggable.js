@@ -133,7 +133,7 @@ export default class Draggable extends React.Component {
     this.setState({ beingDragged: false });
     // Update the x, y in the reference array in mainLayout
     const position = { x: this.state.x, y: this.state.y };
-    this.props.updateLayout(position, this.id);
+    //this.props.updateLayout(position, this.id);
   }
 
   render() {

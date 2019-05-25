@@ -1,5 +1,6 @@
 import React from 'react';
 import Draggable from '../darggable/draggable';
+import { saveLayout, loadLayout } from '../../helpers/fileOperation';
 import './playground.scss';
 
 export default class Playground extends React.Component {
@@ -11,16 +12,6 @@ export default class Playground extends React.Component {
     this.updateLayout = this.updateLayout.bind(this);
     this.componentCount = 0;
     this.nodeRef = React.createRef();
-  }
-
-  componentDidMount() {
-    // console.log(this.nodeRef.current.getBoundingClientRect().right);
-    // console.log(window);
-    window.addEventListener('beforeunload', this.onBeforeUnload);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.onBeforeUnload);
   }
 
   componentDidUpdate(prevProps, prevStat) {
@@ -56,10 +47,6 @@ export default class Playground extends React.Component {
     }
   }
 
-  onBeforeUnload() {
-    // call ur save layout here before playground is unmount
-  }
-
   // It is called when onMouseUp event is fired in draggable
   updateLayout(position, id) {
     const { x, y } = position;
@@ -75,6 +62,7 @@ export default class Playground extends React.Component {
       };
     }, () => {
       console.log('after update', this.state.exsistingComps);
+      saveLayout(this.state.exsistingComps);
     });
   }
 
