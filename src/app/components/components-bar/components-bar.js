@@ -32,6 +32,7 @@ export default class ComponentsBar extends React.Component {
     return componentsList.map(item => (
       <Button
         type="primary"
+        key={item.value}
         onClick={() => {
           this.props.createDraggable(item.value, item.name);
         }}

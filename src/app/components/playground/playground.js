@@ -8,12 +8,17 @@ export default class Playground extends React.Component {
     this.state = {
       exsistingComps: [],
     };
+    this.updateLayout = this.updateLayout.bind(this);
     this.componentCount = 0;
     this.nodeRef = React.createRef();
   }
 
   componentDidMount() {
-    console.log(this.nodeRef.current.getBoundingClientRect().right);
+    // console.log(this.nodeRef.current.getBoundingClientRect().right);
+  }
+
+  componentWillUnmount() {
+    // call ur save layout here before playground is unmount
   }
 
   componentDidUpdate(prevProps, prevStat) {
@@ -24,8 +29,8 @@ export default class Playground extends React.Component {
       comp.props = {
         compType: this.props.compType,
         compName: this.props.compName,
-        x: 400,
-        y: 400,
+        x: 300,
+        y: 300,
         id: this.componentCount
       };
       // Create the init style of the component
@@ -36,6 +41,7 @@ export default class Playground extends React.Component {
           rightBound={this.nodeRef.current.offsetWidth}
           bottomBound={this.nodeRef.current.offsetHeight}
           compType={this.props.compType}
+          updateLayout={this.updateLayout}
         />
       );
       // Update the state
@@ -46,6 +52,24 @@ export default class Playground extends React.Component {
         this.componentCount += 1;
       });
     }
+  }
+
+  // It is called when onMouseUp event is fired in draggable
+  updateLayout(position, id) {
+    const { x, y } = position;
+    this.setState((prevStat) => {
+      console.log('before update', prevStat.exsistingComps);
+      const comps = [...prevStat.exsistingComps];
+      // Find the right component according to id
+      const comp = comps.find(item => item.props.id === id);
+      comp.props.x = x;
+      comp.props.y = y;
+      return {
+        exsistingComps: comps
+      };
+    }, () => {
+      console.log('after update', this.state.exsistingComps);
+    });
   }
 
   render() {

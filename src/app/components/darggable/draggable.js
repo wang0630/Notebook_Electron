@@ -79,15 +79,14 @@ export default class Draggable extends React.Component {
   onMouseMove(e) {
     if (this.state.beingDragged) {
       e.persist();
-      console.log(`offy: ${this.nodeRef.current.offsetTop}, px: ${e.pageX}, py: ${e.pageY} off: ${this.nodeRef.current.offsetLeft}`);
+      // console.log(`offy: ${this.nodeRef.current.offsetTop}, px: ${e.pageX}, py: ${e.pageY} off: ${this.nodeRef.current.offsetLeft}`);
       this.setState((prevStat) => {
         let currentX = e.pageX - this.props.cbWidth - prevStat.relx;
         let currentY = e.pageY - prevStat.rely;
-        console.log('currentX: ', currentX);
-        // If the position is out of biund
-
+        // console.log('currentX: ', currentX);
+        // If the position is out of bound
         // left
-        if (this.nodeRef.current.offsetLeft <= 0) {
+        if (this.nodeRef.current.offsetLeft <= 10) {
           if (currentX < prevStat.x) {
             currentX = prevStat.x;
           }
@@ -122,11 +121,9 @@ export default class Draggable extends React.Component {
   onMouseUp() {
     console.log('In draggable mouseup');
     this.setState({ beingDragged: false });
-    // console.log(e);
-    // toggle isDragging
-    // this.props.clearisDragging();
     // Update the x, y in the reference array in mainLayout
-
+    const position = { x: this.state.x, y: this.state.y };
+    this.props.updateLayout(position, this.id);
     // Do whatever it should according to the type
   }
 
@@ -134,6 +131,9 @@ export default class Draggable extends React.Component {
   // and mouseUp event is not fired before even leaving the object
   onMouseLeave() {
     this.setState({ beingDragged: false });
+    // Update the x, y in the reference array in mainLayout
+    const position = { x: this.state.x, y: this.state.y };
+    this.props.updateLayout(position, this.id);
   }
 
   render() {
