@@ -1,7 +1,8 @@
 import React from 'react';
 import { Icon, Input } from 'antd';
-import { createDir, renameFile } from '../../helpers/fileOperation';
+import { createDir, saveFile, renameFile } from '../../helpers/fileOperation';
 import componentsMapping from '../../constant/components-constant';
+import savefileRoot from '../../constant/file-system-constants';
 import './draggable.scss';
 
 export default class Draggable extends React.Component {
@@ -40,7 +41,7 @@ export default class Draggable extends React.Component {
     // The file already exists, just rename the old one.
     if (this.state.toRename) {
       console.log(`change name from ${this.state.name} to ${newName}`);
-      renameFile(`./savefiles/${this.state.name}`, `./savefiles/${newName}`);
+      renameFile(`${savefileRoot}${this.state.name}`, `${savefileRoot}${newName}`);
       this.setState({
         isNamed: true,
         name: newName,
@@ -55,11 +56,12 @@ export default class Draggable extends React.Component {
       name: newName,
     });
     if (this.props.compType === 'new-dir') {
-      createDir(`./savefiles/${newName}`);
+      createDir(`${savefileRoot}${newName}`);
+    } else if (this.props.compType === 'new-note') {
+      // Create a empty file
+      saveFile(`${savefileRoot}${newName}`, '');
+      // Open ur cuuuuuute little text area here weeeeeeeeeeeeeeee
     }
-    // else if (this.props.compType === 'new-note') {
-    //   // just open text area and save when close
-    // }
   }
 
   onMouseDown(e) {
