@@ -74,10 +74,15 @@ export function saveLayout(componentArr) {
  */
 export function loadLayout() {
   // var fs = require('fs-extra');
-  const data = fs.readFileSync('./savefiles/window-layout.json', 'utf-8');
-  const ret = JSON.parse(data);
-  console.log('The file content is : ', ret);
-  return ret;
+  try {
+    const data = fs.readFileSync('./savefiles/window-layout.json', 'utf-8');
+    const ret = JSON.parse(data);
+    console.log('The file content is : ', ret);
+    return ret;
+  } catch {
+    alert('[WARNING] Failed loading window layout!');
+    return [];
+  }
 }
 
 /**
