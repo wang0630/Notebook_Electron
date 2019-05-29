@@ -10,8 +10,8 @@ export default class Draggable extends React.Component {
     super(props);
     this.state = {
       beingDragged: false,
-      x: 300,
-      y: 300,
+      x: this.props.initX,
+      y: this.props.initY,
       relx: 0,
       rely: 0,
       isNamed: false,

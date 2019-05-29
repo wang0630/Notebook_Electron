@@ -2,6 +2,7 @@ import React from 'react';
 import Draggable from '../darggable/draggable';
 import { saveLayout, loadLayout } from '../../helpers/fileOperation';
 import './playground.scss';
+import Item from 'antd/lib/list/Item';
 
 export default class Playground extends React.Component {
   constructor(props) {
@@ -15,9 +16,39 @@ export default class Playground extends React.Component {
   }
 
   componentDidMount() {
-    // this.setState({
-    //   exsistingComps: loadLayout(),
-    // });
+    let layoutArr = [];
+    const finalArr = [];
+    layoutArr = loadLayout();
+    console.log('Loaded : ', layoutArr);
+    layoutArr.forEach((item) => {
+      // Create a new element
+      const comp = {};
+      // Create the props map
+      comp.props = {
+        compType: item.compType,
+        compName: item.compName,
+        x: item.x,
+        y: item.y,
+        id: item.id
+      };
+      // Create the init style of the component
+      comp.c = (
+        <Draggable
+          id={item.id}
+          cbWidth={this.props.cbWidth}
+          rightBound={this.nodeRef.current.offsetWidth}
+          bottomBound={this.nodeRef.current.offsetHeight}
+          compType={item.compType}
+          updateLayout={this.updateLayout}
+          initX={item.x}
+          initY={item.y}
+        />
+      );
+      finalArr.push(comp);
+    });
+    this.setState({
+      exsistingComps: finalArr,
+    });
   }
 
   componentDidUpdate(prevProps, prevStat) {
@@ -41,6 +72,8 @@ export default class Playground extends React.Component {
           bottomBound={this.nodeRef.current.offsetHeight}
           compType={this.props.compType}
           updateLayout={this.updateLayout}
+          initX={300}
+          initY={300}
         />
       );
       // Update the state

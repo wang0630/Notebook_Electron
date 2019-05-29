@@ -56,7 +56,11 @@ export function saveFile(filename, content) {
 export function saveLayout(componentArr) {
   // const fs = require('fs-extra');
   console.log('save layout');
-  try { fs.writeFileSync('./savefiles/window-layout.json', JSON.stringify(componentArr), 'utf-8'); }
+  const arr = [];
+  componentArr.forEach((item) => {
+    arr.push(item.props);
+  });
+  try { fs.writeFileSync('./savefiles/window-layout.json', JSON.stringify(arr), 'utf-8'); }
   catch (e) { alert('[WARNING] Failed saving window layout!'); }
 }
 
@@ -70,18 +74,9 @@ export function saveLayout(componentArr) {
  */
 export function loadLayout() {
   // var fs = require('fs-extra');
-  let ret;
-  fs.readFile('./savefiles/window-layout.json', 'utf-8', (err, data) => {
-    if (err) {
-      alert('[WARNING] Failed loading window layout! Default will be used.');
-      return;
-    }
-
-    // Change how to handle the file content
-    const layoutArr = JSON.parse(data);
-    // console.log("The file content is : " + layoutArr);
-    ret = layoutArr;
-  });
+  const data = fs.readFileSync('./savefiles/window-layout.json', 'utf-8');
+  const ret = JSON.parse(data);
+  console.log('The file content is : ', ret);
   return ret;
 }
 
