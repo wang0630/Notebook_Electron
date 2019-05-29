@@ -14,6 +14,12 @@ export default class Playground extends React.Component {
     this.nodeRef = React.createRef();
   }
 
+  componentDidMount() {
+    // this.setState({
+    //   exsistingComps: loadLayout(),
+    // });
+  }
+
   componentDidUpdate(prevProps, prevStat) {
     if (this.props.shouldCreateDraggable && !prevProps.shouldCreateDraggable) {
       // Create a new element

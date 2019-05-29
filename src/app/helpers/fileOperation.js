@@ -58,7 +58,6 @@ export function saveLayout(componentArr) {
   console.log('save layout');
   try { fs.writeFileSync('./savefiles/window-layout.json', JSON.stringify(componentArr), 'utf-8'); }
   catch (e) { alert('[WARNING] Failed saving window layout!'); }
-  alert('Layout saved...');
 }
 
 /**
