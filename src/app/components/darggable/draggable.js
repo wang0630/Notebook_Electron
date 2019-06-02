@@ -3,6 +3,7 @@ import { Icon, Input } from 'antd';
 import { createDir, saveFile, renameFile } from '../../helpers/fileOperation';
 import componentsMapping from '../../constant/components-constant';
 import savefileRoot from '../../constant/file-system-constants';
+import TextEditor from '../text-editor/text-editor';
 import './draggable.scss';
 
 export default class Draggable extends React.Component {
@@ -17,6 +18,7 @@ export default class Draggable extends React.Component {
       isNamed: false,
       toRename: false,
       name: 'Change this name',
+      noteReady: false,
       clicked: false,
     };
     this.onMouseUp = this.onMouseUp.bind(this);
@@ -24,6 +26,7 @@ export default class Draggable extends React.Component {
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
     this.updateName = this.updateName.bind(this);
+    this.componentEvent = this.componentEvent.bind(this);
     this.nodeRef = React.createRef();
     this.id = this.props.id;
   }
@@ -136,6 +139,67 @@ export default class Draggable extends React.Component {
     this.setState({ beingDragged: false });
   }
 
+  componentEvent(event, type) {
+    // If user press enter and the div is clicked
+    if (event.key === 'Enter' && this.state.clicked) {
+      console.log("enter is pressed!!");
+      this.setState({
+        clicked: false,
+        isNamed: false,
+        toRename: true,
+      });
+      switch (type) {
+        case "folder-add":
+
+          break;
+        case "form":
+
+          break;
+      }
+    }
+    this.state.noteReady = true;
+  }
+
+  displayIcon(mapping) {
+    return (
+       <React.Fragment>
+      { 
+        this.state.noteReady && mapping.type === "form"
+          ? <TextEditor/>
+          :
+          <React.Fragment>
+          <Icon
+              id="file-icon"
+              type={mapping.type}
+              style={{
+                fontSize: '70px',
+                color: mapping.color
+              }}
+            />
+            {
+              
+                this.state.isNamed
+                  ? (
+                    <span id="file-name" className="draggable__span">
+                      { this.state.name }
+                    </span>
+                  )
+                  : (
+                    <Input
+                      id="file-name"
+                      placeholder="Enter the name"
+                      defaultValue={this.state.name}
+                      size="small"
+                      onPressEnter={e => this.updateName(e.target.value)}
+                    />
+                  )
+            }
+            </React.Fragment> 
+      }
+       </React.Fragment>
+    )
+  }
+
   render() {
     const style = {
       position: 'absolute',
@@ -161,40 +225,9 @@ export default class Draggable extends React.Component {
           }
         }}
         onBlur={() => { this.setState({ clicked: false }); }}
-        onKeyPress={(e) => {
-          // If user press enter and the div is clicked
-          if (e.key === 'Enter' && this.state.clicked) {
-            this.setState({
-              clicked: false,
-              isNamed: false,
-              toRename: true,
-            });
-          }
-        }}
+        onKeyPress={(e) => this.componentEvent(e, mapping.type)}
       >
-        <Icon
-          type={mapping.type}
-          style={{
-            fontSize: '70px',
-            color: mapping.color
-          }}
-        />
-        {
-          this.state.isNamed
-            ? (
-              <span className="draggable__span">
-                { this.state.name }
-              </span>
-            )
-            : (
-              <Input
-                placeholder="Enter the name"
-                defaultValue={this.state.name}
-                size="small"
-                onPressEnter={e => this.updateName(e.target.value)}
-              />
-            )
-        }
+        {this.displayIcon(mapping)}
       </div>
     );
   }
