@@ -2,7 +2,6 @@ import React from 'react';
 import Draggable from '../darggable/draggable';
 import { saveLayout, loadLayout } from '../../helpers/fileOperation';
 import './playground.scss';
-import Item from 'antd/lib/list/Item';
 
 export default class Playground extends React.Component {
   constructor(props) {
@@ -59,6 +58,7 @@ export default class Playground extends React.Component {
       comp.props = {
         compType: this.props.compType,
         compName: this.props.compName,
+        name: '',
         x: 300,
         y: 300,
         id: this.componentCount
@@ -87,15 +87,15 @@ export default class Playground extends React.Component {
   }
 
   // It is called when onMouseUp event is fired in draggable
-  updateLayout(position, id) {
-    const { x, y } = position;
+  updateLayout({ x, y, name, id }) {
     this.setState((prevStat) => {
-      console.log('before update', prevStat.exsistingComps);
+      // console.log('before update', prevStat.exsistingComps);
       const comps = [...prevStat.exsistingComps];
       // Find the right component according to id
       const comp = comps.find(item => item.props.id === id);
       comp.props.x = x;
       comp.props.y = y;
+      comp.props.name = name;
       return {
         exsistingComps: comps
       };

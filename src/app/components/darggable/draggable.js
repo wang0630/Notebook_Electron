@@ -16,7 +16,7 @@ export default class Draggable extends React.Component {
       rely: 0,
       isNamed: false,
       toRename: false,
-      name: 'Change this name',
+      name: this.props.name,
       clicked: false,
     };
     this.onMouseUp = this.onMouseUp.bind(this);
@@ -79,7 +79,6 @@ export default class Draggable extends React.Component {
   onMouseMove(e) {
     if (this.state.beingDragged) {
       e.persist();
-      // console.log(`offy: ${this.nodeRef.current.offsetTop}, px: ${e.pageX}, py: ${e.pageY} off: ${this.nodeRef.current.offsetLeft}`);
       this.setState((prevStat) => {
         let currentX = e.pageX - this.props.cbWidth - prevStat.relx;
         let currentY = e.pageY - prevStat.rely;
@@ -122,8 +121,8 @@ export default class Draggable extends React.Component {
     console.log('In draggable mouseup');
     this.setState({ beingDragged: false });
     // Update the x, y in the reference array in mainLayout
-    const position = { x: this.state.x, y: this.state.y };
-    this.props.updateLayout(position, this.id);
+    const stat = { x: this.state.x, y: this.state.y, name: this.state.name, id: this.id };
+    this.props.updateLayout(stat);
     // Do whatever it should according to the type
   }
 
@@ -132,8 +131,6 @@ export default class Draggable extends React.Component {
   onMouseLeave() {
     this.setState({ beingDragged: false });
     // Update the x, y in the reference array in mainLayout
-    const position = { x: this.state.x, y: this.state.y };
-    //this.props.updateLayout(position, this.id);
   }
 
   render() {
