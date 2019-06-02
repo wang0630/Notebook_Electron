@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'antd';
 import Draggable from '../darggable/draggable';
 import { saveLayout, loadLayout } from '../../helpers/fileOperation';
 import './playground.scss';
@@ -8,8 +9,10 @@ export default class Playground extends React.Component {
     super(props);
     this.state = {
       exsistingComps: [],
+      showClose: false
     };
     this.updateLayout = this.updateLayout.bind(this);
+    this.showCloseOptions = this.showCloseOptions.bind(this);
     this.componentCount = 0;
     this.nodeRef = React.createRef();
   }
@@ -39,6 +42,7 @@ export default class Playground extends React.Component {
           bottomBound={this.nodeRef.current.offsetHeight}
           compType={item.compType}
           updateLayout={this.updateLayout}
+          showCloseOptions={this.showCloseOptions}
           initX={item.x}
           initY={item.y}
         />
@@ -72,6 +76,7 @@ export default class Playground extends React.Component {
           bottomBound={this.nodeRef.current.offsetHeight}
           compType={this.props.compType}
           updateLayout={this.updateLayout}
+          showCloseOptions={this.showCloseOptions}
           initX={300}
           initY={300}
         />
@@ -82,6 +87,7 @@ export default class Playground extends React.Component {
       }, () => {
         this.props.clearShouldCreateDraggable();
         this.componentCount += 1;
+        console.log(this.componentCount);
       });
     }
   }
@@ -105,12 +111,36 @@ export default class Playground extends React.Component {
     });
   }
 
+  showCloseOptions() {
+    console.log('showcloseoptions');
+    this.setState({
+      showClose: true
+    });
+  }
+
   render() {
     // Extract the exsisting components
     const r = this.state.exsistingComps.map(comp => comp.c);
     return (
       <section className="playground" ref={this.nodeRef}>
         { r }
+        {
+          this.state.showClose
+            ? (
+              <div className="playground__close">
+                <p>
+                  Do you want to remove icon or the whole folder?
+                </p>
+                <Button>
+                  Delete whole folder
+                </Button>
+                <Button>
+                  Only remove icon
+                </Button>
+              </div>
+            )
+            : null
+        }
       </section>
     );
   }

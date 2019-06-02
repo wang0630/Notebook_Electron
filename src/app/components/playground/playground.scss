@@ -1,3 +1,16 @@
 .playground {
   position: relative;
+  height: 100vh;
+  &__close {
+    background-color: aquamarine;
+    position: absolute;
+    // placed center
+    top: 40%;
+    left: 35%;
+    width: 30%;
+    height: 20%;
+
+    display: grid;
+    grid-template-areas: 'p p' 'btn1 btn2';
+  }
 }
