@@ -126,6 +126,13 @@ export default class Playground extends React.Component {
     });
   }
 
+  showCloseOptions() {
+    console.log('showcloseoptions');
+    this.setState({
+      showClose: true
+    });
+  }
+
   render() {
     // Extract the exsisting components
     const r = this.state.exsistingComps.map(comp => comp.c);
