@@ -49,18 +49,19 @@ export default class Draggable extends React.Component {
       });
       return;
     }
-
-    // The file does not exist, create a new one with the given name.
-    this.setState({
-      isNamed: true,
-      name: newName,
-    });
-    if (this.props.compType === 'new-dir') {
-      createDir(`${savefileRoot}${newName}`);
-    } else if (this.props.compType === 'new-note') {
-      // Create a empty file
-      saveFile(`${savefileRoot}${newName}`, '');
-      // Open ur cuuuuuute little text area here weeeeeeeeeeeeeeee
+    if (newName) {
+      // The file does not exist, create a new one with the given name.
+      this.setState({
+        isNamed: true,
+        name: newName,
+      });
+      if (this.props.compType === 'new-dir') {
+        createDir(`${savefileRoot}${newName}`);
+      } else if (this.props.compType === 'new-note') {
+        // Create a empty file
+        saveFile(`${savefileRoot}${newName}`, '');
+        // Open ur cuuuuuute little text area here weeeeeeeeeeeeeeee
+      }
     }
   }
 
