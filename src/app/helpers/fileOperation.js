@@ -40,8 +40,11 @@ export function createDir(dir) {
  */
 export function saveFile(filename, content) {
   // const fs = require('fs-extra');
-  try { fs.writeFileSync(filename, content, 'utf-8'); }
-  catch (e) { alert('[WARNING] Failed to save the file! Try again later.'); }
+  try {
+    fs.writeFileSync(filename, content, 'utf-8');
+  } catch (e) {
+    alert('[WARNING] Failed to save the file! Try again later.');
+  }
 }
 
 /**
@@ -52,16 +55,24 @@ export function saveFile(filename, content) {
  *  The array of components existing on the window.
  *  They should be saved in an array of objects
  *  written in json format.
+ * @param {int} componentCounter
+ * The number of components in componentArr.
  */
-export function saveLayout(componentArr) {
+export function saveLayout(componentArr, componentCounter) {
   // const fs = require('fs-extra');
   console.log('save layout');
   const arr = [];
   componentArr.forEach((item) => {
-    arr.push(item.props);
+    if (item.props.name) {
+      arr.push(item.props);
+    }
   });
-  try { fs.writeFileSync('./savefiles/window-layout.json', JSON.stringify(arr), 'utf-8'); }
-  catch (e) { alert('[WARNING] Failed saving window layout!'); }
+  arr.push(componentCounter);
+  try {
+    fs.writeFileSync('./savefiles/window-layout.json', JSON.stringify(arr), 'utf-8');
+  } catch (e) {
+    alert('[WARNING] Failed saving window layout!');
+  }
 }
 
 /**
@@ -80,7 +91,7 @@ export function loadLayout() {
     console.log('The file content is : ', ret);
     return ret;
   } catch {
-    alert('[WARNING] Failed loading window layout!');
+    alert('[WARNING] Failed loading window layout! Using default.');
     return [];
   }
 }

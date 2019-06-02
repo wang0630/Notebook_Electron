@@ -24,6 +24,7 @@ export default class Draggable extends React.Component {
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
     this.updateName = this.updateName.bind(this);
+    this.updatePlaygroundLayout = this.updatePlaygroundLayout.bind(this);
     this.nodeRef = React.createRef();
     this.id = this.props.id;
   }
@@ -38,6 +39,10 @@ export default class Draggable extends React.Component {
   }
 
   updateName(newName) {
+    if (!newName) {
+      alert('[WARNING] Trying to name something as empty.');
+      return;
+    }
     // The file already exists, just rename the old one.
     if (this.state.toRename) {
       console.log(`change name from ${this.state.name} to ${newName}`);
@@ -46,7 +51,7 @@ export default class Draggable extends React.Component {
         isNamed: true,
         name: newName,
         toRename: false,
-      });
+      }, () => this.updatePlaygroundLayout());
       return;
     }
     if (newName) {
@@ -54,7 +59,7 @@ export default class Draggable extends React.Component {
       this.setState({
         isNamed: true,
         name: newName,
-      });
+      }, () => this.updatePlaygroundLayout());
       if (this.props.compType === 'new-dir') {
         createDir(`${savefileRoot}${newName}`);
       } else if (this.props.compType === 'new-note') {
@@ -77,6 +82,8 @@ export default class Draggable extends React.Component {
     }));
   }
 
+  // What's that dark shadowy place down here, papa?
+  // It's legacy code. We don't go there, Simba.
   onMouseMove(e) {
     if (this.state.beingDragged) {
       e.persist();
@@ -122,8 +129,7 @@ export default class Draggable extends React.Component {
     console.log('In draggable mouseup');
     this.setState({ beingDragged: false });
     // Update the x, y in the reference array in mainLayout
-    const stat = { x: this.state.x, y: this.state.y, name: this.state.name, id: this.id };
-    this.props.updateLayout(stat);
+    this.updatePlaygroundLayout();
     // Do whatever it should according to the type
   }
 
@@ -132,6 +138,11 @@ export default class Draggable extends React.Component {
   onMouseLeave() {
     this.setState({ beingDragged: false });
     // Update the x, y in the reference array in mainLayout
+  }
+
+  updatePlaygroundLayout() {
+    const stat = { x: this.state.x, y: this.state.y, name: this.state.name, id: this.id };
+    this.props.updateLayout(stat);
   }
 
   render() {
@@ -178,7 +189,7 @@ export default class Draggable extends React.Component {
           }}
         />
         {
-          this.state.isNamed
+          this.state.name
             ? (
               <span className="draggable__span">
                 { this.state.name }

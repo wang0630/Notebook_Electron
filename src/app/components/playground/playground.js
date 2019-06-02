@@ -14,11 +14,16 @@ export default class Playground extends React.Component {
     this.nodeRef = React.createRef();
   }
 
+  // Load the window layout of last session
   componentDidMount() {
     let layoutArr = [];
     const finalArr = [];
     layoutArr = loadLayout();
     console.log('Loaded : ', layoutArr);
+    const compCount = layoutArr.pop();
+    if (compCount) {
+      this.componentCount = compCount;
+    }
     layoutArr.forEach((item) => {
       // Create a new element
       const comp = {};
@@ -28,12 +33,14 @@ export default class Playground extends React.Component {
         compName: item.compName,
         x: item.x,
         y: item.y,
-        id: item.id
+        id: item.id,
+        name: item.name,
       };
       // Create the init style of the component
       comp.c = (
         <Draggable
           id={item.id}
+          name={item.name}
           cbWidth={this.props.cbWidth}
           rightBound={this.nodeRef.current.offsetWidth}
           bottomBound={this.nodeRef.current.offsetHeight}
@@ -58,7 +65,7 @@ export default class Playground extends React.Component {
       comp.props = {
         compType: this.props.compType,
         compName: this.props.compName,
-        name: '',
+        name: 'yeenit',
         x: 300,
         y: 300,
         id: this.componentCount
@@ -101,7 +108,8 @@ export default class Playground extends React.Component {
       };
     }, () => {
       console.log('after update', this.state.exsistingComps);
-      saveLayout(this.state.exsistingComps);
+      console.log(this.componentCount);
+      saveLayout(this.state.exsistingComps, this.componentCount);
     });
   }
 
