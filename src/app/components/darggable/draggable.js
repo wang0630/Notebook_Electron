@@ -23,6 +23,7 @@ export default class Draggable extends React.Component {
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
+    this.onCloseClick = this.onCloseClick.bind(this);
     this.updateName = this.updateName.bind(this);
     this.updatePlaygroundLayout = this.updatePlaygroundLayout.bind(this);
     this.nodeRef = React.createRef();
@@ -145,6 +146,10 @@ export default class Draggable extends React.Component {
     this.props.updateLayout(stat);
   }
 
+  onCloseClick() {
+    this.props.showCloseOptions();
+  }
+
   render() {
     const style = {
       position: 'absolute',
@@ -185,6 +190,18 @@ export default class Draggable extends React.Component {
           type={mapping.type}
           style={{
             fontSize: '70px',
+            color: mapping.color
+          }}
+        />
+        <Icon
+          type="close-circle"
+          theme="filled"
+          onClick={this.onCloseClick}
+          style={{
+            fontSize: '20px',
+            position: 'absolute',
+            top: '10%',
+            right: '10%',
             color: mapping.color
           }}
         />
