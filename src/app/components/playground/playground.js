@@ -94,7 +94,6 @@ export default class Playground extends React.Component {
       }, () => {
         this.props.clearShouldCreateDraggable();
         this.componentCount += 1;
-        console.log(this.componentCount);
       });
     }
   }
@@ -114,15 +113,7 @@ export default class Playground extends React.Component {
       };
     }, () => {
       console.log('after update', this.state.exsistingComps);
-      console.log(this.componentCount);
       saveLayout(this.state.exsistingComps, this.componentCount);
-    });
-  }
-
-  showCloseOptions() {
-    console.log('showcloseoptions');
-    this.setState({
-      showClose: true
     });
   }
 

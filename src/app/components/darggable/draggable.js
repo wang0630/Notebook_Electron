@@ -41,7 +41,7 @@ export default class Draggable extends React.Component {
 
   updateName(newName) {
     if (!newName) {
-      alert('[WARNING] Trying to name something as empty.');
+      // alert('[WARNING] Trying to name something as empty.');
       return;
     }
     // The file already exists, just rename the old one.
@@ -200,13 +200,13 @@ export default class Draggable extends React.Component {
           style={{
             fontSize: '20px',
             position: 'absolute',
-            top: '10%',
-            right: '10%',
+            top: '5%',
+            right: '5%',
             color: mapping.color
           }}
         />
         {
-          this.state.name
+          this.state.isNamed
             ? (
               <span className="draggable__span">
                 { this.state.name }
