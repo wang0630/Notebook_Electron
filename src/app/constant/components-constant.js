@@ -6,6 +6,9 @@ const componentsMapping = {
   'new-note': {
     type: 'form',
     color: '#21946e'
+  },
+  'text-area': {
+    type: 'text-area'
   }
 };
 
