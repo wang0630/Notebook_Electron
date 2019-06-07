@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button } from 'antd';
 import Draggable from '../darggable/draggable';
-import { saveLayout, loadLayout } from '../../helpers/fileOperation';
+import { saveLayout, loadLayout, deleteFile } from '../../helpers/fileOperation';
+import savefileRoot from '../../constant/file-system-constants';
 import './playground.scss';
 
 export default class Playground extends React.Component {
@@ -41,6 +42,7 @@ export default class Playground extends React.Component {
         y: item.y,
         id: item.id,
         name: item.name,
+        path: item.path,
       };
       // Create the init style of the component
       comp.c = (
@@ -77,7 +79,8 @@ export default class Playground extends React.Component {
         name: 'yeenit',
         x: 300,
         y: 300,
-        id: this.componentCount
+        id: this.componentCount,
+        path: `${savefileRoot}`, // Path without the name of this file. Put /name behind this
       };
       // Create the init style of the component
       comp.c = (
@@ -144,6 +147,7 @@ export default class Playground extends React.Component {
         if (comps[i].props.id === prevStat.idToBeDeleted) {
           if (deleteFolder) {
             // put your function here
+            deleteFile(`${comps[i].props.path}/${comps[i].props.name}`);
           }
           break;
         }

@@ -48,6 +48,21 @@ export function saveFile(filename, content) {
 }
 
 /**
+ * A function that deletes a given directory or file.
+ *
+ * @param {string} dir
+ *  The directory to be deleted. The path should start
+ *  from root of this project.
+ */
+export function deleteFile(dir) {
+  try {
+    fs.removeSync(dir);
+  } catch (e) {
+    alert('[WARNING] Failed deleting directory.');
+  }
+}
+
+/**
  * A function that saves current GUI layout.
  * Should be called before closing the app.
  *
