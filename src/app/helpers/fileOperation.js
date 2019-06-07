@@ -148,6 +148,6 @@ export function renameFile(oldPath, newPath) {
   try {
     fs.renameSync(oldPath, newPath);
   } catch (e) {
-    alert('[WARNING] Failed to save the file! Try again later.');
+    alert('[WARNING] Failed to rename the file! Try again later.');
   }
 }

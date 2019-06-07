@@ -228,7 +228,45 @@ export default class Draggable extends React.Component {
         onBlur={() => { this.setState({ clicked: false }); }}
         onKeyPress={(e) => this.componentEvent(e, mapping.type)}
       >
+<<<<<<< HEAD
         {this.displayIcon(mapping)}
+=======
+        <Icon
+          type={mapping.type}
+          style={{
+            fontSize: '70px',
+            color: mapping.color
+          }}
+        />
+        <Icon
+          type="close-circle"
+          theme="filled"
+          onClick={this.onCloseClick}
+          style={{
+            fontSize: '20px',
+            position: 'absolute',
+            top: '5%',
+            right: '5%',
+            color: mapping.color
+          }}
+        />
+        {
+          (this.state.name && !this.state.toRename)
+            ? (
+              <span className="draggable__span">
+                { this.state.name }
+              </span>
+            )
+            : (
+              <Input
+                placeholder="Enter the name"
+                defaultValue={this.state.name}
+                size="small"
+                onPressEnter={e => this.updateName(e.target.value)}
+              />
+            )
+        }
+>>>>>>> master
       </div>
     );
   }
