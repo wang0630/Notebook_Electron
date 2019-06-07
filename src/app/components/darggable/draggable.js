@@ -18,7 +18,7 @@ export default class Draggable extends React.Component {
       isNamed: false,
       toRename: false,
       name: this.props.name,
-      noteReady: false,
+      type: false,
       clicked: false,
     };
     this.onMouseUp = this.onMouseUp.bind(this);
@@ -156,7 +156,11 @@ export default class Draggable extends React.Component {
       <React.Fragment>
         {
           this.state.isNamed && mapping.type === 'form'
-            ? <TextEditor />
+            ? (
+              <React.Fragment>
+                <TextEditor onCloseClick={this.onCloseClick} />
+              </React.Fragment>
+            )
             : (
               <React.Fragment>
                 <Icon
