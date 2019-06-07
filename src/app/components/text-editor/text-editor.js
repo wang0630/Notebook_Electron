@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactQuill from 'react-quill';
-import { Icon } from 'antd';
+import { Icon, Input } from 'antd';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
 import './text-editor.scss';
@@ -33,6 +33,15 @@ export default class TextArea extends React.Component {
   render() {
     return (
       <div>
+        <Input
+          placeholder="Enter the name"
+          // defaultValue=""
+          size="small"
+          onPressEnter={e => this.props.updateName(e.target.value)}
+          style={{
+            width: '50%'
+          }}
+        />
         <ReactQuill
           className="text-editor"
           theme={this.state.theme}

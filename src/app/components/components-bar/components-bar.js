@@ -8,7 +8,7 @@ const componentsList = [
     name: 'New directory'
   },
   {
-    value: 'new-note',
+    value: 'text-area',
     name: 'New Note'
   }
 ];
