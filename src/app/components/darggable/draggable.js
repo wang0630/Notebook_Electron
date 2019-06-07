@@ -227,7 +227,16 @@ export default class Draggable extends React.Component {
           }
         }}
         onBlur={() => { this.setState({ clicked: false }); }}
-        onKeyPress={e => this.componentEvent(e, mapping.type)}
+        onKeyPress={(e) => {
+          // If user press enter and the div is clicked
+          if (e.key === 'Enter' && this.state.clicked) {
+            this.setState({
+              clicked: false,
+              isNamed: false,
+              toRename: true,
+            });
+          }
+        }}
       >
         {this.displayIcon(mapping)}
       </div>
