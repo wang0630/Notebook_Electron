@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from 'antd';
-import { ipcRenderer } from 'electron';
 import Draggable from '../darggable/draggable';
 import { saveLayout, loadLayout } from '../../helpers/fileOperation';
 import './playground.scss';
