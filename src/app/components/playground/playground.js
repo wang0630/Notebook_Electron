@@ -61,16 +61,6 @@ export default class Playground extends React.Component {
     this.setState({
       exsistingComps: finalArr,
     });
-    // Set out channel for listening close window event
-    ipcRenderer.on('saveLayout', (event, arg) => {
-      console.log(this.state.exsistingComps);
-      if (arg) {
-        saveLayout(this.state.exsistingComps, this.componentCount);
-        ipcRenderer.sendSync('beforeWindowClose', { close: true });
-      } else {
-        ipcRenderer.sendSync('beforeWindowClose', { close: false });
-      }
-    });
   }
 
   componentDidUpdate(prevProps, prevStat) {
@@ -106,6 +96,7 @@ export default class Playground extends React.Component {
       }, () => {
         this.props.clearShouldCreateDraggable();
         this.componentCount += 1;
+        console.log(this.componentCount);
       });
     }
   }
@@ -125,6 +116,7 @@ export default class Playground extends React.Component {
       };
     }, () => {
       console.log('after update', this.state.exsistingComps);
+      saveLayout(this.state.exsistingComps, this.componentCount);
     });
   }
 

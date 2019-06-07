@@ -206,7 +206,7 @@ export default class Draggable extends React.Component {
           }}
         />
         {
-          this.state.isNamed
+          (this.state.name && !this.state.toRename)
             ? (
               <span className="draggable__span">
                 { this.state.name }
