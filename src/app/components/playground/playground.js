@@ -8,11 +8,14 @@ export default class Playground extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      idToBeDeleted: null,
       exsistingComps: [],
       showClose: false
     };
     this.updateLayout = this.updateLayout.bind(this);
     this.showCloseOptions = this.showCloseOptions.bind(this);
+    this.hideCloseOptions = this.hideCloseOptions.bind(this);
+    this.deleteIconAndFolder = this.deleteIconAndFolder.bind(this);
     this.componentCount = 0;
     this.nodeRef = React.createRef();
   }
@@ -43,6 +46,7 @@ export default class Playground extends React.Component {
       comp.c = (
         <Draggable
           id={item.id}
+          key={item.id}
           name={item.name}
           cbWidth={this.props.cbWidth}
           rightBound={this.nodeRef.current.offsetWidth}
@@ -79,6 +83,7 @@ export default class Playground extends React.Component {
       comp.c = (
         <Draggable
           id={this.componentCount}
+          key={this.componentCount}
           cbWidth={this.props.cbWidth}
           rightBound={this.nodeRef.current.offsetWidth}
           bottomBound={this.nodeRef.current.offsetHeight}
@@ -119,15 +124,46 @@ export default class Playground extends React.Component {
     });
   }
 
-  showCloseOptions() {
+  showCloseOptions(childId) {
     this.setState({
+      idToBeDeleted: childId,
       showClose: true
+    });
+  }
+
+  hideCloseOptions() {
+    this.setState({ idToBeDeleted: null, showClose: false });
+  }
+
+  deleteIconAndFolder(deleteFolder = null) {
+    this.setState((prevStat) => {
+      const comps = [...prevStat.exsistingComps];
+      // Find the right component according to id
+      let i;
+      for (i = 0; i < comps.length; i += 1) {
+        if (comps[i].props.id === prevStat.idToBeDeleted) {
+          if (deleteFolder) {
+            // put your function here
+          }
+          break;
+        }
+      }
+      // Delete the icon but not the content inside
+      comps.splice(i, 1);
+      return {
+        exsistingComps: comps,
+        idToBeDeleted: null,
+        showClose: false
+      };
+    }, () => {
+      saveLayout(this.state.exsistingComps, this.componentCount);
     });
   }
 
   render() {
     // Extract the exsisting components
     const r = this.state.exsistingComps.map(comp => comp.c);
+    console.log('r: ', r);
     return (
       <section className="playground" ref={this.nodeRef}>
         { r }
@@ -141,6 +177,7 @@ export default class Playground extends React.Component {
                 <Button
                   className="playground__btn--1"
                   type="primary"
+                  onClick={this.deleteIconAndFolder}
                   ghost
                 >
                   Only remove icon
@@ -148,6 +185,7 @@ export default class Playground extends React.Component {
                 <Button
                   className="playground__btn--2"
                   type="danger"
+                  onClick={() => this.deleteIconAndFolder(true)}
                   ghost
                 >
                   Delete whole folder
@@ -155,9 +193,7 @@ export default class Playground extends React.Component {
                 <Button
                   className="playground__cancel-btn"
                   type="dashed"
-                  onClick={() => {
-                    this.setState({ showClose: false });
-                  }}
+                  onClick={this.hideCloseOptions}
                   ghost
                 >
                   Cancel

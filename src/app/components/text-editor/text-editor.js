@@ -33,7 +33,6 @@ export default class TextArea extends React.Component {
       <div>
         <ReactQuill
           theme={this.state.theme}
-          className="rrrr"
           value={this.state.text}
           placeholder="add new content here..."
           onChange={(content, delta, source, editor) => {

@@ -93,7 +93,6 @@ export default class Draggable extends React.Component {
       this.setState((prevStat) => {
         let currentX = e.pageX - this.props.cbWidth - prevStat.relx;
         let currentY = e.pageY - prevStat.rely;
-        // console.log('currentX: ', currentX);
         // If the position is out of bound
         // left
         if (this.nodeRef.current.offsetLeft <= 10) {
@@ -149,7 +148,7 @@ export default class Draggable extends React.Component {
   }
 
   onCloseClick() {
-    this.props.showCloseOptions();
+    this.props.showCloseOptions(this.id);
   }
 
   displayIcon(mapping) {
