@@ -4,6 +4,7 @@ import Draggable from '../darggable/draggable';
 import { saveLayout, loadLayout, deleteFile } from '../../helpers/fileOperation';
 import savefileRoot from '../../constant/file-system-constants';
 import './playground.scss';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 export default class Playground extends React.Component {
   constructor(props) {
@@ -11,12 +12,15 @@ export default class Playground extends React.Component {
     this.state = {
       idToBeDeleted: null,
       exsistingComps: [],
-      showClose: false
+      searchedComps: [],
+      showClose: false,
+      searched: false
     };
     this.updateLayout = this.updateLayout.bind(this);
     this.showCloseOptions = this.showCloseOptions.bind(this);
     this.hideCloseOptions = this.hideCloseOptions.bind(this);
     this.deleteIconAndFolder = this.deleteIconAndFolder.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.componentCount = 0;
     this.nodeRef = React.createRef();
   }
@@ -104,6 +108,7 @@ export default class Playground extends React.Component {
         this.props.clearShouldCreateDraggable();
         this.componentCount += 1;
         console.log(this.componentCount);
+        console.log(this.state.exsistingComps[0].props.name);
       });
     }
   }
@@ -162,12 +167,74 @@ export default class Playground extends React.Component {
     }, () => {
       saveLayout(this.state.exsistingComps, this.componentCount);
     });
+  handleChange(e) {
+
+      // Variable to hold the original version of the list
+      let currentList = [];
+      // Variable to hold the filtered list before putting into state
+      let newList = [];
+      let t = [];
+      // If the search bar isn't empty
+      if (e.target.value !== "") {
+          // Assign the original list to currentList
+          let tt = [];
+          for( let i=0; i< this.state.exsistingComps.length; i++){
+            // push the conent to elements!
+            tt.push(this.state.exsistingComps[i].props.name);
+          }
+          currentList = tt;
+          console.log(currentList);
+          // Use .filter() to determine which items should be displayed
+          // based on the search terms
+          newList = currentList.filter(item => {
+            // change current item to lowercase
+            let lc = item.toLowerCase();
+            // change search term to lowercase
+            let filter = e.target.value.toLowerCase();
+            // check to see if the current list item includes the search term
+            // If it does, it will be added to newList. Using lowercase eliminates
+            // issues with capitalization in search terms and search content
+            return lc.includes(filter);
+          });
+          // set the searched flag to true, so it can only render the wanted
+          this.setState({
+            searched: true,
+            searchedComps : []
+          }, () => {
+            for(let i=0; i < newList.length; i++){
+              for( let j = 0; j < this.state.exsistingComps.length; j++){
+                // push the conent to elements!
+                if(newList[i] == this.state.exsistingComps[j].props.name){
+                  console.log('B4', this.state.exsistingComps);
+                  t.push(this.state.exsistingComps[j]);
+                  // this.state.searchedComps.push(this.state.exsistingComps[j]);
+                  console.log('A4', this.state.exsistingComps);
+                }
+              }
+            }
+            this.setState({ searchedComps: t });
+          });
+          // console.log(this.state.searchedComps);
+      } else {
+        // set the searched flag to false, so it can render everything
+        console.log('BB4', this.state.exsistingComps);
+        this.setState({searched: false});
+        console.log('AA4', this.state.exsistingComps);
+      }
+      // Set the filtered state based on what our rules added to newList
   }
 
   render() {
     // Extract the exsisting components
-    const r = this.state.exsistingComps.map(comp => comp.c);
-    console.log('r: ', r);
+    let r = [];
+    if(this.state.searched == 0){
+      r = this.state.exsistingComps.map(comp => comp.c);
+      console.log('all');
+    }
+    else{
+      r = this.state.searchedComps.map(comp => comp.c);
+      console.log('search');
+    }
     return (
       <section className="playground" ref={this.nodeRef}>
         { r }
@@ -206,6 +273,7 @@ export default class Playground extends React.Component {
             )
             : null
         }
+         <input type="text" className="input" onChange={this.handleChange} placeholder="Search..." />
       </section>
     );
   }

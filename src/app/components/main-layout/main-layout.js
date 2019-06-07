@@ -44,6 +44,7 @@ export default class MainLayout extends React.Component {
           compName={this.state.compName}
           cbWidth={this.state.cbWidth}
         />
+          <input type="text" className="input" onChange={this.handleChange} placeholder="Search..." />
       </section>
     );
   }

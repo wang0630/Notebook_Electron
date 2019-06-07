@@ -10,6 +10,10 @@ const componentsList = [
   {
     value: 'text-area',
     name: 'New Note'
+  },
+  {
+    value: 'search-bar',
+    name: 'search bar'
   }
 ];
 
