@@ -125,6 +125,7 @@ export default class Playground extends React.Component {
       };
     }, () => {
       console.log('after update', this.state.exsistingComps);
+      saveLayout(this.state.exsistingComps, this.componentCount);
     });
   }
 
