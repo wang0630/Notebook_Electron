@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'antd';
+import { ipcRenderer } from 'electron';
 import Draggable from '../darggable/draggable';
 import { saveLayout, loadLayout } from '../../helpers/fileOperation';
 import './playground.scss';
@@ -56,8 +57,19 @@ export default class Playground extends React.Component {
       );
       finalArr.push(comp);
     });
+    // Ready all components
     this.setState({
       exsistingComps: finalArr,
+    });
+    // Set out channel for listening close window event
+    ipcRenderer.on('saveLayout', (event, arg) => {
+      console.log(this.state.exsistingComps);
+      if (arg) {
+        saveLayout(this.state.exsistingComps, this.componentCount);
+        ipcRenderer.sendSync('beforeWindowClose', { close: true });
+      } else {
+        ipcRenderer.sendSync('beforeWindowClose', { close: false });
+      }
     });
   }
 
@@ -113,12 +125,10 @@ export default class Playground extends React.Component {
       };
     }, () => {
       console.log('after update', this.state.exsistingComps);
-      saveLayout(this.state.exsistingComps, this.componentCount);
     });
   }
 
   showCloseOptions() {
-    console.log('showcloseoptions');
     this.setState({
       showClose: true
     });
@@ -134,14 +144,32 @@ export default class Playground extends React.Component {
           this.state.showClose
             ? (
               <div className="playground__close">
-                <p>
+                <p className="playground__warning">
                   Do you want to remove icon or the whole folder?
                 </p>
-                <Button>
+                <Button
+                  className="playground__btn--1"
+                  type="primary"
+                  ghost
+                >
+                  Only remove icon
+                </Button>
+                <Button
+                  className="playground__btn--2"
+                  type="danger"
+                  ghost
+                >
                   Delete whole folder
                 </Button>
-                <Button>
-                  Only remove icon
+                <Button
+                  className="playground__cancel-btn"
+                  type="dashed"
+                  onClick={() => {
+                    this.setState({ showClose: false });
+                  }}
+                  ghost
+                >
+                  Cancel
                 </Button>
               </div>
             )

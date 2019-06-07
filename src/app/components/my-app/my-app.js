@@ -1,7 +1,6 @@
 import React from 'react';
 import MainLayout from '../main-layout/main-layout';
 import AddNote from '../add-note/add-note';
-import './my-app.scss';
 
 // Create main App component
 export default class App extends React.Component {

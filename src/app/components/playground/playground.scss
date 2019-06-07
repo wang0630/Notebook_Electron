@@ -2,7 +2,6 @@
   position: relative;
   height: 100vh;
   &__close {
-    background-color: aquamarine;
     position: absolute;
     // placed center
     top: 40%;
@@ -10,7 +9,30 @@
     width: 30%;
     height: 20%;
 
+    border: 3px solid #21946e;
+    border-radius: 10px;
     display: grid;
-    grid-template-areas: 'p p' 'btn1 btn2';
+    grid-template-areas: 'p p p' 'btn1 btn2 cancel';
+    justify-items: center;
+    align-items: center;
+
+    padding: 20px;
+  }
+
+  &__warning {
+    grid-area: p;
+    color: green;
+  }
+
+  &__btn--1 {
+    grid-area: btn1;
+  }
+
+  &__btn--2 {
+    grid-area: btn2;
+  }
+
+  &__cancel-btn {
+    grid-area: cancel;
   }
 }
