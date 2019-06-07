@@ -1,34 +1,49 @@
 import React from 'react';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow'
+import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.bubble.css';
 
 // configurations for quill text editor
-var options = {
-    debug: 'info',
-    modules: {
-      toolbar: '#toolbar'
-    },
-    placeholder: 'Compose an epic...',
-    theme: 'snow'
-};
 
 export default class TextArea extends React.Component{
     constructor (props) {
         super(props);
-        this.state = { text: '' } // You can also pass a Quill Delta here
+        this.state = { text: '', theme: 'snow' } // You can also pass a Quill Delta here
         this.textChange = this.textChange.bind(this)
     }
 
-    textChange(value) {
-        this.setState({ text: value })
+    textChange(content, delta, source, editor) {
+        // content: text value
+        // delta: the format quill used to recorded info
+        // source: always 'user'
+        // editor: including the editor api
+        this.setState({ text: content })
+    }
+
+    themeChange(theme) {
+        if (theme === 'core')
+            theme = null
+        this.setState({ theme: theme })
     }
 
     render() {
         return (
-            <ReactQuill theme="bubble"
-                        defaultValue="input some content here..."
-                        value={this.state.text}
-                        onChange={this.textChange} />
+            <div>
+                <ReactQuill theme={this.state.theme}
+                            className="rrrr"
+                            value={this.state.text}
+                            placeholder="add new content here..."
+                            onChange={(content, delta, source, editor) => this.textChange(content, delta, source, editor)} />
+                <div className="themeSwitcher">
+                    <label>Theme </label>
+                    <select onChange={(e) => 
+                        this.themeChange(e.target.value)}>
+                        <option value="snow">Snow</option>
+                        <option value="bubble">Bubble</option>
+                        <option value="core">Core</option>
+                    </select>
+                </div>
+            </div>
         );
     }
 }
