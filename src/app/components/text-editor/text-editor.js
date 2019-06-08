@@ -10,18 +10,38 @@ import './text-editor.scss';
 export default class TextArea extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { text: '', theme: 'snow' }; // You can also pass a Quill Delta here
+    this.state = {
+      text: this.props.noteContent === undefined || this.props.ntoeContent === null
+        ? ''
+        : this.props.noteContent,
+      theme: 'snow'
+    };
     this.textChange = this.textChange.bind(this);
+    // the listener when file name is clicked
+    this.rename = this.rename.bind(this);
+    // flag recording the state of renaming the file name
+    this.renaming = false;
   }
 
+  // handle the change of the content of notes
   textChange(content, delta, source, editor) {
     // content: text value
     // delta: the format quill used to recorded info
     // source: always 'user'
     // editor: including the editor api
     this.setState({ text: content });
+    // this.setState({ text: editor.getContents() });
+    //    prob: losing focus
+    //    errmsg: addRange(): The given range isn't in document.
+    editor.getContents().ops.forEach(item => console.log(item.insert));
+
+    /** ***************** */
+    /* going to implement */
+    /** ***************** */
+    // this.props.savefile(content);
   }
 
+  // change the theme of notes
   themeChange(theme) {
     let newTheme = null;
     if (theme !== 'core') {
@@ -30,25 +50,51 @@ export default class TextArea extends React.Component {
     this.setState({ theme: newTheme });
   }
 
+  // rename the filename of named notes
+  rename() {
+    this.renaming = true;
+  }
+
+  // update the filename of notes
+  updateName(value) {
+    console.log('this filename is updated');
+    this.props.updateName(value);
+    this.renaming = false;
+  }
+
   render() {
     return (
-      <div>
-        <Input
-          placeholder="Enter the name"
-          // defaultValue=""
-          size="small"
-          onPressEnter={e => this.props.updateName(e.target.value)}
-          style={{
-            width: '50%'
-          }}
-        />
+      <div className="container">
+        {
+          this.props.filename && !this.renaming
+            ? (
+              <span
+                className="filename"
+                onMouseDown={this.rename}
+              >
+                {this.props.filename}
+              </span>
+            )
+            : (
+              <Input
+                className="filename"
+                placeholder="Enter the name"
+                defaultValue={this.props.filename}
+                size="small"
+                onPressEnter={e => this.updateName(e.target.value)}
+                style={{
+                  width: '100%'
+                }}
+              />
+            )
+        }
         <ReactQuill
           className="text-editor"
           theme={this.state.theme}
           value={this.state.text}
           placeholder="add new content here..."
-          onChange={(content, delta, source, editor) => {
-            this.textChange(content, delta, source, editor);
+          onChange={(content) => {
+            this.textChange(content);
           }}
         />
         <Icon

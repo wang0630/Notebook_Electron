@@ -153,7 +153,16 @@ export default class Draggable extends React.Component {
   displayIcon(mapping) {
     switch (mapping.type) {
       case 'text-area':
-        return <TextEditor onCloseClick={this.onCloseClick} updateName={this.updateName} />;
+        return (
+          <TextEditor
+            onCloseClick={this.onCloseClick}
+            filename={this.state.name}
+            updateName={this.updateName}
+            // implement savefile(noteContent)
+            // savefile={this(.props).savefile}
+            // noteContent={this(.props).noteContent}
+          />
+        );
       case 'folder-add':
       default:
         return (
