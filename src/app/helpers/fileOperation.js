@@ -48,6 +48,17 @@ export function saveFile(filename, content) {
 }
 
 /**
+ * A temporary function in order to complete read/write file in text-editor.js.
+ * When the file does not exist, the empty string '' is returned.
+ * @param {string} filename
+ *  The file to be read.
+ */
+export function readFile(filename) {
+  console.log(filename);
+  return '';
+}
+
+/**
  * A function that saves current GUI layout.
  * Should be called before closing the app.
  *

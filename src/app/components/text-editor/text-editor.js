@@ -4,6 +4,7 @@ import { Icon, Input } from 'antd';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
 import './text-editor.scss';
+import { saveFile, readFile } from '../../helpers/fileOperation';
 
 // configurations for quill text editor
 
@@ -11,19 +12,14 @@ export default class TextArea extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: this.props.noteContent === undefined || this.props.ntoeContent === null
-        ? ''
-        : this.props.noteContent,
+      text: readFile(this.props.filename),
       theme: 'snow'
     };
-    this.textChange = this.textChange.bind(this);
-    // the listener when file name is clicked
-    this.rename = this.rename.bind(this);
-    // flag recording the state of renaming the file name
-    this.renaming = false;
+    this.textChange = this.textChange.bind(this); // handle the change of the content of notes
+    this.rename = this.rename.bind(this); // the listener when file name is clicked
+    this.renaming = false; // flag recording the state of renaming the file name
   }
 
-  // handle the change of the content of notes
   textChange(content, delta, source, editor) {
     // content: text value
     // delta: the format quill used to recorded info
@@ -35,10 +31,7 @@ export default class TextArea extends React.Component {
     //    errmsg: addRange(): The given range isn't in document.
     editor.getContents().ops.forEach(item => console.log(item.insert));
 
-    /** ***************** */
-    /* going to implement */
-    /** ***************** */
-    // this.props.savefile(content);
+    saveFile(this.props.filename, content);
   }
 
   // change the theme of notes
