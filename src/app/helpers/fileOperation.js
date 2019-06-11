@@ -102,7 +102,6 @@ export function readFile(filename) {
   return ret;
 }
 
-
 /**
  * A function that deletes a given directory or file.
  *
