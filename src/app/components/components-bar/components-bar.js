@@ -8,7 +8,7 @@ const componentsList = [
     name: 'New directory'
   },
   {
-    value: 'text-area',
+    value: 'new-note',
     name: 'New Note'
   },
   {
@@ -38,7 +38,12 @@ export default class ComponentsBar extends React.Component {
         type="primary"
         key={item.value}
         onClick={() => {
-          this.props.createDraggable(item.value, item.name);
+          if(item.name != 'search bar'){
+            this.props.createDraggable(item.value, item.name);
+          }
+          else{
+            this.props.flipSearch();
+          }
         }}
       >
         {item.name}

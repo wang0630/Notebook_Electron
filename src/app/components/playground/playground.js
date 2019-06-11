@@ -262,7 +262,7 @@ export default class Playground extends React.Component {
             )
             : null
         }
-        <input type="text" className="input" onChange={this.handleChange} placeholder="Search..." />
+        {this.props.search_button_clicked == true? <input type="text" className="input" onChange={this.handleChange} placeholder="Search..." />:null}
       </section>
     );
   }

@@ -9,11 +9,13 @@ export default class MainLayout extends React.Component {
     super(props);
     this.state = {
       shouldCreateDraggable: false,
-      cbWidth: 0
+      cbWidth: 0,
+      search_button_clicked: false
     };
     this.createDraggable = this.createDraggable.bind(this);
     this.clearShouldCreateDraggable = this.clearShouldCreateDraggable.bind(this);
     this.getComponentBarWidth = this.getComponentBarWidth.bind(this);
+    this.flipSearch = this.flipSearch.bind(this);
   }
 
   createDraggable(compType, compName) {
@@ -29,6 +31,11 @@ export default class MainLayout extends React.Component {
     this.setState({ cbWidth: width });
   }
 
+  flipSearch(){
+    this.setState({ search_button_clicked: !this.state.search_button_clicked});
+    console.log(this.state.search_button_clicked);
+  }
+
   render() {
     return (
       <section className="main-layout">
@@ -36,6 +43,7 @@ export default class MainLayout extends React.Component {
           clearisDragging={this.clearisDragging}
           createDraggable={this.createDraggable}
           getComponentBarWidth={this.getComponentBarWidth}
+          flipSearch={this.flipSearch}
         />
         <Playground
           shouldCreateDraggable={this.state.shouldCreateDraggable}
@@ -43,8 +51,8 @@ export default class MainLayout extends React.Component {
           compType={this.state.compType}
           compName={this.state.compName}
           cbWidth={this.state.cbWidth}
+          search_button_clicked = {this.state.search_button_clicked}
         />
-          <input type="text" className="input" onChange={this.handleChange} placeholder="Search..." />
       </section>
     );
   }
