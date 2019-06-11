@@ -5,7 +5,17 @@
  * This file includes all the functions related to file I/O.
  * All the scripts in the project can use the functions declared
  * here by importing from '../../helpers/fileOperation'.
- */
+ * --------------------------------------------------------
+ * Available functions:
+ * createDir
+ * saveFile
+ * readFile
+ * deleteFile
+ * moveFile
+ * renameFile
+ * saveLayout
+ * loadLayout
+*/
 
 const fs = require('fs-extra');
 
@@ -48,6 +58,29 @@ export function saveFile(filename, content) {
 }
 
 /**
+ * A function that reads a savefile and returns
+ * the string saved.
+ *
+ * @param {string} filename
+ *  The file to open. The path should start
+ *  from root of this project.
+ * @return {string}
+ *  The string saved in the file. If failed reading
+ *  the file, this string will be empty.
+ */
+export function readFile(filename) {
+  let ret;
+  try {
+    ret = fs.readFileSync(filename, content, 'utf-8');
+  } catch (e) {
+    alert('[WARNING] Failed reading file ', filename);
+    ret = '';
+  }
+  return ret;
+}
+
+
+/**
  * A function that deletes a given directory or file.
  *
  * @param {string} dir
@@ -59,66 +92,6 @@ export function deleteFile(dir) {
     fs.removeSync(dir);
   } catch (e) {
     alert('[WARNING] Failed deleting directory.');
-  }
-}
-
-/**
- * A temporary function in order to complete read/write file in text-editor.js.
- * When the file does not exist, the empty string '' is returned.
- * @param {string} filename
- *  The file to be read.
- */
-export function readFile(filename) {
-  console.log(filename);
-  return '';
-}
-
-/**
- * A function that saves current GUI layout.
- * Should be called before closing the app.
- *
- * @param {array} componentArr
- *  The array of components existing on the window.
- *  They should be saved in an array of objects
- *  written in json format.
- * @param {int} componentCounter
- * The number of components in componentArr.
- */
-export function saveLayout(componentArr, componentCounter) {
-  // const fs = require('fs-extra');
-  console.log('save layout');
-  const arr = [];
-  componentArr.forEach((item) => {
-    if (item.props.name) {
-      arr.push(item.props);
-    }
-  });
-  arr.push(componentCounter);
-  try {
-    fs.writeFileSync('./savefiles/window-layout.json', JSON.stringify(arr), 'utf-8');
-  } catch (e) {
-    alert('[WARNING] Failed saving window layout!');
-  }
-}
-
-/**
- * A function that loads GUI layout last run.
- * Should be called when the app is executed.
- *
- * @return {array}
- *  The array of objects, written in json format,
- *  to be rendered on the window.
- */
-export function loadLayout() {
-  // var fs = require('fs-extra');
-  try {
-    const data = fs.readFileSync('./savefiles/window-layout.json', 'utf-8');
-    const ret = JSON.parse(data);
-    console.log('The file content is : ', ret);
-    return ret;
-  } catch {
-    alert('[WARNING] Failed loading window layout! Using default.');
-    return [];
   }
 }
 
@@ -175,5 +148,54 @@ export function renameFile(oldPath, newPath) {
     fs.renameSync(oldPath, newPath);
   } catch (e) {
     alert('[WARNING] Failed to rename the file! Try again later.');
+  }
+}
+
+/**
+ * A function that saves current GUI layout.
+ * Should be called before closing the app.
+ *
+ * @param {array} componentArr
+ *  The array of components existing on the window.
+ *  They should be saved in an array of objects
+ *  written in json format.
+ * @param {int} componentCounter
+ * The number of components in componentArr.
+ */
+export function saveLayout(componentArr, componentCounter) {
+  // const fs = require('fs-extra');
+  console.log('save layout');
+  const arr = [];
+  componentArr.forEach((item) => {
+    if (item.props.name) {
+      arr.push(item.props);
+    }
+  });
+  arr.push(componentCounter);
+  try {
+    fs.writeFileSync('./savefiles/window-layout.json', JSON.stringify(arr), 'utf-8');
+  } catch (e) {
+    alert('[WARNING] Failed saving window layout!');
+  }
+}
+
+/**
+ * A function that loads GUI layout last run.
+ * Should be called when the app is executed.
+ *
+ * @return {array}
+ *  The array of objects, written in json format,
+ *  to be rendered on the window.
+ */
+export function loadLayout() {
+  // var fs = require('fs-extra');
+  try {
+    const data = fs.readFileSync('./savefiles/window-layout.json', 'utf-8');
+    const ret = JSON.parse(data);
+    console.log('The file content is : ', ret);
+    return ret;
+  } catch {
+    alert('[WARNING] Failed loading window layout! Using default.');
+    return [];
   }
 }
