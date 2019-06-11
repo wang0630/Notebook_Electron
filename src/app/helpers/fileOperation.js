@@ -17,6 +17,7 @@
  * saveLayout
  * loadLayout
 */
+import pathModule from 'path';
 
 const fs = require('fs-extra');
 
@@ -68,6 +69,8 @@ export function readDir(dir) {
  * @param {string} filename
  *  The file to be written. The path should start
  *  from root of this project.
+ * @param {string} path
+ *  The directories created by our button
  * @param {string} content
  *  The content to be written.
  */
@@ -77,6 +80,7 @@ export function saveFile(filename, content) {
     fs.writeFileSync(filename, content, 'utf-8');
   } catch (e) {
     alert('[WARNING] Failed to save the file! Try again later.');
+    console.log(e);
   }
 }
 
@@ -87,6 +91,8 @@ export function saveFile(filename, content) {
  * @param {string} filename
  *  The file to open. The path should start
  *  from root of this project.
+ * @param {string} path
+ *  The directories created by our button
  * @return {string}
  *  The string saved in the file. If failed reading
  *  the file, this string will be empty.
@@ -94,9 +100,9 @@ export function saveFile(filename, content) {
 export function readFile(filename) {
   let ret;
   try {
-    ret = fs.readFileSync(filename, content, 'utf-8');
+    ret = fs.readFileSync(filename, 'utf-8');
   } catch (e) {
-    alert('[WARNING] Failed reading file ', filename);
+    // alert('[WARNING] Failed reading file ', filename);
     ret = '';
   }
   return ret;

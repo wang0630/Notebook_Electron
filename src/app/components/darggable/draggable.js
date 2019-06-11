@@ -66,7 +66,7 @@ export default class Draggable extends React.Component {
         createDir(`${savefileRoot}${newName}`);
       } else if (this.props.compType === 'new-note') {
         // Create a empty file
-        saveFile(`${savefileRoot}${newName}`, '');
+        saveFile(`${newName}`, '');
         // Open ur cuuuuuute little text area here weeeeeeeeeeeeeeee
       }
     }

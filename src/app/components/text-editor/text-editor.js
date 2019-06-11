@@ -5,6 +5,7 @@ import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
 import './text-editor.scss';
 import { saveFile, readFile } from '../../helpers/fileOperation';
+import savefileRoot from '../../constant/file-system-constants';
 
 // configurations for quill text editor
 
@@ -12,7 +13,7 @@ export default class TextArea extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: readFile(this.props.filename),
+      text: '',
       theme: 'snow'
     };
     this.textChange = this.textChange.bind(this); // handle the change of the content of notes
@@ -20,18 +21,17 @@ export default class TextArea extends React.Component {
     this.renaming = false; // flag recording the state of renaming the file name
   }
 
-  textChange(content, delta, source, editor) {
+  componentDidMount() {
+    this.setState({ text: readFile(`${savefileRoot}${this.props.filename}`) });
+  }
+
+  textChange(content) {
     // content: text value
     // delta: the format quill used to recorded info
     // source: always 'user'
     // editor: including the editor api
     this.setState({ text: content });
-    // this.setState({ text: editor.getContents() });
-    //    prob: losing focus
-    //    errmsg: addRange(): The given range isn't in document.
-    editor.getContents().ops.forEach(item => console.log(item.insert));
-
-    saveFile(this.props.filename, content);
+    saveFile(`${savefileRoot}${this.props.filename}`, content);
   }
 
   // change the theme of notes
@@ -50,7 +50,6 @@ export default class TextArea extends React.Component {
 
   // update the filename of notes
   updateName(value) {
-    console.log('this filename is updated');
     this.props.updateName(value);
     this.renaming = false;
   }
