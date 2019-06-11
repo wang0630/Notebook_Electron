@@ -8,6 +8,7 @@
  * --------------------------------------------------------
  * Available functions:
  * createDir
+ * readDir
  * saveFile
  * readFile
  * deleteFile
@@ -28,7 +29,6 @@ const fs = require('fs-extra');
  *  from root of this project.
  */
 export function createDir(dir) {
-  // const fs = require('fs-extra');
   try {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
@@ -36,6 +36,29 @@ export function createDir(dir) {
   } catch (e) {
     alert('[ERROR] Failed creating new directory. Creation process aborted.');
   }
+}
+
+/**
+ * A function that opens a given directory.
+ * If the directory already exists, nothing will be done.
+ *
+ * @param {string} dir
+ *  The directory to be created. The path should start
+ *  from root of this project.
+ * @return {array}
+ *  A string array containing the filenames in the directory.
+ */
+export function readDir(dir) {
+  let ret = [];
+  if (fs.existsSync(dir)) {
+    alert('[ERROR] The given directory does not exist.');
+  }
+  try {
+    ret = fs.readdirSync(dir);
+  } catch (e) {
+    alert('[ERROR] Failed reading directory.');
+  }
+  return ret;
 }
 
 /**
