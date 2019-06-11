@@ -18,7 +18,6 @@ export default class Draggable extends React.Component {
       isNamed: false,
       toRename: false,
       name: this.props.name,
-      noteReady: false,
       clicked: false,
     };
     this.onMouseUp = this.onMouseUp.bind(this);
@@ -152,53 +151,57 @@ export default class Draggable extends React.Component {
   }
 
   displayIcon(mapping) {
-    return (
-      <React.Fragment>
-        {
-          this.state.isNamed && mapping.type === 'form'
-            ? <TextEditor />
-            : (
-              <React.Fragment>
-                <Icon
-                  type={mapping.type}
-                  style={{
-                    fontSize: '70px',
-                    color: mapping.color
-                  }}
-                />
-                <Icon
-                  type="close-circle"
-                  theme="filled"
-                  onClick={this.onCloseClick}
-                  style={{
-                    fontSize: '20px',
-                    position: 'absolute',
-                    top: '5%',
-                    right: '5%',
-                    color: mapping.color
-                  }}
-                />
-                {
-                  (this.state.name && !this.state.toRename)
-                    ? (
-                      <span className="draggable__span">
-                        { this.state.name }
-                      </span>
-                    )
-                    : (
-                      <Input
-                        placeholder="Enter the name"
-                        defaultValue={this.state.name}
-                        size="small"
-                        onPressEnter={e => this.updateName(e.target.value)}
-                      />
-                    )
-                }
-              </React.Fragment>
-            )
-        }
-      </React.Fragment>
-    );
+    switch (mapping.type) {
+      case 'text-area':
+        return (
+          <TextEditor
+            onCloseClick={this.onCloseClick}
+            filename={this.state.name}
+            updateName={this.updateName}
+          />
+        );
+      case 'folder-add':
+      default:
+        return (
+          <React.Fragment>
+            <Icon
+              type={mapping.type}
+              style={{
+                fontSize: '70px',
+                color: mapping.color
+              }}
+            />
+            <Icon
+              type="close-circle"
+              theme="filled"
+              onClick={this.onCloseClick}
+              style={{
+                fontSize: '20px',
+                position: 'absolute',
+                top: '5%',
+                right: '5%',
+                color: mapping.color
+              }}
+            />
+            {
+              (this.state.name && !this.state.toRename)
+                ? (
+                  <span className="draggable__span">
+                    { this.state.name }
+                  </span>
+                )
+                : (
+                  <Input
+                    placeholder="Enter the name"
+                    defaultValue={this.state.name}
+                    size="small"
+                    onPressEnter={e => this.updateName(e.target.value)}
+                  />
+                )
+            }
+          </React.Fragment>
+        );
+    }
   }
 
   render() {
