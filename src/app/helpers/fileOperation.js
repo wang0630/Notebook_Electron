@@ -28,14 +28,38 @@ const fs = require('fs-extra');
  * @param {string} dir
  *  The directory to be created. The path should start
  *  from root of this project.
+ * @return {int}
+ *  If the given directory doesn't exist, this is 0.
+ *  Otherwise, this will be a number indicating the
+ *  system is creating a directory with the number in
+ *  the back.
+ *  However, if the creation process failed, this will
+ *  be -1.
  */
 export function createDir(dir) {
   try {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
+      return 0;
     }
+    // Directory exists
+    let newDir;
+    let num = 1;
+    newDir = `${dir}(${num})`;
+    while (fs.existsSync(newDir)) {
+      num += 1;
+      newDir = `${dir}(${num})`;
+      if (num > 500) return -1; // num too large, prevent inf. loop
+    }
+    const ans = confirm(`[Warning] Directory exists. Would you like to name it ${newDir}?`);
+    if (ans) {
+      fs.mkdirSync(newDir);
+      return num;
+    }
+    return -1;
   } catch (e) {
     alert('[ERROR] Failed creating new directory. Creation process aborted.');
+    return -1;
   }
 }
 

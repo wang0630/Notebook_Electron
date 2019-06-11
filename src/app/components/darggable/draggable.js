@@ -61,6 +61,7 @@ export default class Draggable extends React.Component {
       this.setState({
         isNamed: true,
         name: newName,
+<<<<<<< HEAD
       }, () => this.updatePlaygroundLayout());
       if (this.props.compType === 'new-dir') {
         createDir(`${savefileRoot}${newName}`);
@@ -69,6 +70,29 @@ export default class Draggable extends React.Component {
         saveFile(`${newName}`, '');
         // Open ur cuuuuuute little text area here weeeeeeeeeeeeeeee
       }
+=======
+      }, () => {
+        this.updatePlaygroundLayout();
+        if (this.props.compType === 'new-dir') {
+          const result = createDir(`${savefileRoot}${newName}`);
+          if (result > 0) {
+            this.setState({
+              isNamed: true,
+              name: `${newName}(${result})`,
+            });
+          } else if (result === -1) {
+            this.setState({
+              isNamed: false,
+              name: '',
+            });
+          }
+        } else if (this.props.compType === 'new-note') {
+          // Create a empty file
+          saveFile(`${savefileRoot}${newName}`, '');
+          // Open ur cuuuuuute little text area here weeeeeeeeeeeeeeee
+        }
+      });
+>>>>>>> refs/remotes/origin/master
     }
   }
 
@@ -226,6 +250,7 @@ export default class Draggable extends React.Component {
           // Don't get focus when input is focused
           if (e.target.tagName !== 'INPUT') {
             this.setState({ clicked: true });
+            console.log('weeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
           }
         }}
         onBlur={() => { this.setState({ clicked: false }); }}
