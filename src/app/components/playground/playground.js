@@ -73,6 +73,8 @@ export default class Playground extends React.Component {
 
   componentDidUpdate(prevProps, prevStat) {
     if (this.props.shouldCreateDraggable && !prevProps.shouldCreateDraggable) {
+      const INITX = 300;
+      const INITY = 300;
       // Create a new element
       const comp = {};
       // Create the props map
@@ -80,8 +82,8 @@ export default class Playground extends React.Component {
         compType: this.props.compType,
         compName: this.props.compName,
         name: 'yeenit',
-        x: 300,
-        y: 300,
+        x: INITX,
+        y: INITY,
         id: this.componentCount,
         path: `${savefileRoot}`, // Path without the name of this file. Put /name behind this
       };
@@ -96,8 +98,8 @@ export default class Playground extends React.Component {
           compType={this.props.compType}
           updateLayout={this.updateLayout}
           showCloseOptions={this.showCloseOptions}
-          initX={300}
-          initY={300}
+          initX={INITX}
+          initY={INITY}
         />
       );
       // Update the state
@@ -167,6 +169,8 @@ export default class Playground extends React.Component {
     }, () => {
       saveLayout(this.state.exsistingComps, this.componentCount);
     });
+  }
+
   handleChange(e) {
     console.log(this.state.exsistingComps);
     // Variable to hold the original version of the list name
@@ -204,12 +208,10 @@ export default class Playground extends React.Component {
         }
       }
       this.setState({ searched: true, searchedComps: tmp });
-      // console.log(this.state.searchedComps);
     } else {
       // set the searched flag to false, so it can render everything
       this.setState({ searched: false });
     }
-    // Set the filtered state based on what our rules added to newList
   }
 
   render() {
