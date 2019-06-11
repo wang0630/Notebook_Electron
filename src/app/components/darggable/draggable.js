@@ -158,9 +158,6 @@ export default class Draggable extends React.Component {
             onCloseClick={this.onCloseClick}
             filename={this.state.name}
             updateName={this.updateName}
-            // implement savefile(noteContent)
-            // savefile={this(.props).savefile}
-            // noteContent={this(.props).noteContent}
           />
         );
       case 'folder-add':
