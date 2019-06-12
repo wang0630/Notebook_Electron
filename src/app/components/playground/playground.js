@@ -111,6 +111,7 @@ export default class Playground extends React.Component {
           showNotesSelector={this.showNotesSelector}
           initX={item.x}
           initY={item.y}
+          path={item.path}
         />
       );
       finalArr.push(comp);
@@ -123,11 +124,15 @@ export default class Playground extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.shouldCreateDraggable && !prevProps.shouldCreateDraggable) {
-      this.createDraggable();
+      if (this.props.folderPath) {
+        this.createFromExisting();
+      } else {
+        this.createBrandNew();
+      }
     }
   }
 
-  createDraggable(compType, name = this.props.folderPath ? this.getFolderName() : '') {
+  createDraggable(compType, name, path) {
     const INITX = 300;
     const INITY = 300;
     // Create a new element
@@ -139,9 +144,9 @@ export default class Playground extends React.Component {
       x: INITX,
       y: INITY,
       id: this.componentCount,
-      // savefileRoot is the path without the name of this file. Put /name behind this
-      // If this.props.folderPath is not empty, meaning that it is an existing folder
-      path: this.props.folderPath ? this.props.folderPath : `${savefileRoot}`,
+      // path is the containing folder of the note(if it is a note)
+      // path is the path of itself(if it is a dir)
+      path
     };
     // Create the init style of the component
     comp.c = (
@@ -158,6 +163,7 @@ export default class Playground extends React.Component {
         initX={INITX}
         initY={INITY}
         name={comp.props.name}
+        path={path}
       />
     );
     this.setState(prevStat => (
@@ -170,20 +176,24 @@ export default class Playground extends React.Component {
     });
   }
 
-  createFromPlayground() {
-
+  createFromPlayground(name) {
+    this.createDraggable('text-area', name, this.state.folderPathToOpen);
   }
 
   createBrandNew() {
-    this.createDraggable();
+    this.createDraggable(this.props.compType, '', savefileRoot);
   }
 
   createFromExisting() {
-
+    const name = this.getFolderName();
+    const patharr = this.props.folderPath.split('/');
+    patharr.splice(patharr.length - 2, 1);
+    this.createDraggable('new-dir', name, patharr.join('/'));
   }
 
   getFolderName() {
     const fullPathArr = this.props.folderPath.split('/');
+    console.log('name: ', fullPathArr);
     return fullPathArr[fullPathArr.length - 2];
   }
 
@@ -237,14 +247,15 @@ export default class Playground extends React.Component {
   showNotesSelector(id) {
     this.setState({ showNotes: true }, () => {
       let path = '';
+      let name = '';
       for (let i = 0; i < this.state.exsistingComps.length; i += 1) {
         if (id === this.state.exsistingComps[i].props.id) {
-          console.log('find it');
-          ({ path } = this.state.exsistingComps[i].props);
+          console.log('find it: ', this.state.exsistingComps[i]);
+          ({ path, name } = this.state.exsistingComps[i].props);
           break;
         }
       }
-      this.setState({ folderPathToOpen: path });
+      this.setState({ folderPathToOpen: `${path}${name}/` });
     });
   }
 
@@ -257,7 +268,6 @@ export default class Playground extends React.Component {
         if (comps[i].props.id === prevStat.idToBeDeleted) {
           if (deleteContent) { // put your function here
             deleteFile(`${comps[i].props.path}/${comps[i].props.name}`);
-            console.log('inside');
           }
           break;
         }
@@ -283,11 +293,14 @@ export default class Playground extends React.Component {
           className="playground__notes-selector__container"
           onDoubleClick={() => {
             if (item.isDir) {
-              console.log('dir: ', this.state.folderPathToOpen);
-              this.setState(prevStat => ({ folderPathToOpen: `${prevStat.folderPathToOpen}${item.item}/` }));
+              console.log('before update dir: ', this.state.folderPathToOpen);
+              this.setState(prevStat => ({ folderPathToOpen: `${prevStat.folderPathToOpen}${item.item}/` }),
+                () => {
+                  console.log('after update dir: ', this.state.folderPathToOpen);
+                });
             } else {
-              this.createDraggableFromPlayground('text-area', item.item);
-              this.setState({ showNotes: false, folderPathToOpen: '' });
+              this.createFromPlayground(item.item);
+              this.setState({ showNotes: false });
             }
           }}
         >
@@ -321,7 +334,6 @@ export default class Playground extends React.Component {
         // push the conent to elements!
         currentList.push(this.state.exsistingComps[i].props.name);
       }
-      console.log(currentList);
       // Use .filter() to determine which items should be displayed
       // based on the search terms
       newList = currentList.filter((item) => {

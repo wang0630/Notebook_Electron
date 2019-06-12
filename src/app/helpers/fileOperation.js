@@ -78,7 +78,7 @@ export function readDir(dir) {
   let arr = []; // array of filenames
   const ret = []; // the return array of objects
   if (!fs.existsSync(dir)) {
-    alert('[ERROR] The given directory does not exist.');
+    // alert('[ERROR] The given directory does not exist.');
   }
   try {
     arr = fs.readdirSync(dir);
@@ -93,7 +93,8 @@ export function readDir(dir) {
       ret.push(obj);
     });
   } catch (e) {
-    alert('[ERROR] Failed reading directory.');
+    console.log('err: ', e);
+    // alert('[ERROR] Failed reading directory.');
   }
   return ret;
 }

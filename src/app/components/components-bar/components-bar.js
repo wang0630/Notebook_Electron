@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
 import { remote } from 'electron';
+import savefileRoot from '../../constant/file-system-constants';
 import './components-bar.scss';
 
 const { dialog } = remote;
@@ -67,7 +68,8 @@ export default class ComponentsBar extends React.Component {
               break;
             }
             default: {
-              this.props.createDraggable(item.value);
+              // Brand new draggable(folder or note)
+              this.props.createDraggable(item.value, '');
             }
           }
         }}

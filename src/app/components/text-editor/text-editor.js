@@ -5,7 +5,6 @@ import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
 import './text-editor.scss';
 import { saveFile, readFile } from '../../helpers/fileOperation';
-import savefileRoot from '../../constant/file-system-constants';
 
 // configurations for quill text editor
 
@@ -22,7 +21,7 @@ export default class TextArea extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ text: readFile(`${savefileRoot}${this.props.filename}`) });
+    this.setState({ text: readFile(`${this.props.path}${this.props.filename}`) });
   }
 
   textChange(content) {
@@ -31,7 +30,7 @@ export default class TextArea extends React.Component {
     // source: always 'user'
     // editor: including the editor api
     this.setState({ text: content });
-    saveFile(`${savefileRoot}${this.props.filename}`, content);
+    saveFile(`${this.props.path}${this.props.filename}`, content);
   }
 
   // change the theme of notes

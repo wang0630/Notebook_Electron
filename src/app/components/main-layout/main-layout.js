@@ -18,7 +18,7 @@ export default class MainLayout extends React.Component {
     this.flipSearch = this.flipSearch.bind(this);
   }
 
-  createDraggable(compType, folderPath = '') {
+  createDraggable(compType, folderPath) {
     // create a draggable inside the playground
     this.setState({ shouldCreateDraggable: true, compType, folderPath });
   }

@@ -187,6 +187,7 @@ export default class Draggable extends React.Component {
             updateName={this.updateName}
             onFocus={this.onEditorFocus}
             lostFocus={this.lostEditorFocus}
+            path={this.props.path}
           />
         );
       case 'folder-add':
