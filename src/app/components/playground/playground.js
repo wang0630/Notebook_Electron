@@ -157,14 +157,6 @@ export default class Playground extends React.Component {
         name={comp.props.name}
       />
     );
-    // Update the state
-    // this.setState({
-    //   exsistingComps: [...prevStat.exsistingComps, comp]
-    // }, () => {
-    //   this.props.clearShouldCreateDraggable();
-    //   this.componentCount += 1;
-    //   console.log(this.componentCount);
-    // });
     this.setState(prevStat => (
       {
         exsistingComps: [...prevStat.exsistingComps, comp]
@@ -276,6 +268,7 @@ export default class Playground extends React.Component {
           className="playground__notes-selector__container"
           onDoubleClick={() => {
             this.createDraggable('text-area', item);
+            this.setState({ showNotes: false, folderPathToOpen: '' });
           }}
         >
           <Icon
@@ -346,7 +339,15 @@ export default class Playground extends React.Component {
       r = this.state.searchedComps.map(comp => comp.c);
     }
     return (
-      <section className="playground" ref={this.nodeRef}>
+      <section
+        className="playground"
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') {
+            this.setState({ showNotes: false, folderPathToOpen: '' });
+          }
+        }}
+        ref={this.nodeRef}
+      >
         { r }
         {
           this.state.showClose

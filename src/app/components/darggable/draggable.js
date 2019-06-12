@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Input, AutoComplete } from 'antd';
+import { Icon, Input } from 'antd';
 import { createDir, saveFile, renameFile } from '../../helpers/fileOperation';
 import componentsMapping from '../../constant/components-constant';
 import savefileRoot from '../../constant/file-system-constants';
@@ -84,7 +84,6 @@ export default class Draggable extends React.Component {
         } else if (this.props.compType === 'new-note') {
           // Create a empty file
           saveFile(`${savefileRoot}${newName}`, '');
-          // Open ur cuuuuuute little text area here weeeeeeeeeeeeeeee
         }
       });
     }
