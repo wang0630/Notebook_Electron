@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Icon } from 'antd';
 import Draggable from '../darggable/draggable';
 import { saveLayout, loadLayout, deleteFile, readDir } from '../../helpers/fileOperation';
+import { linearCollisionCheck } from '../../helpers/collisionCheck';
 import savefileRoot from '../../constant/file-system-constants';
 import './playground.scss';
 
@@ -181,9 +182,23 @@ export default class Playground extends React.Component {
 
   // It is called when onMouseUp event is fired in draggable
   updateLayout({ x, y, name, id }) {
+    console.log('before update', this.state.exsistingComps);
+
+    const colResult = linearCollisionCheck(this.state.exsistingComps, x, y, id);
+
     this.setState((prevStat) => {
-      // console.log('before update', prevStat.exsistingComps);
       const comps = [...prevStat.exsistingComps];
+      if (colResult === 1) {
+        let i;
+        for (i = 0; i < comps.length; i += 1) {
+          if (comps[i].props.id === id) break;
+        }
+        comps.splice(i, 1);
+        console.log('yee');
+        return {
+          exsistingComps: comps
+        };
+      }
       // Find the right component according to id
       const comp = comps.find(item => item.props.id === id);
       comp.props.x = x;
