@@ -131,6 +131,10 @@ export default class Playground extends React.Component {
         this.createBrandNew();
       }
     }
+
+    if (!this.props.search_button_clicked && prevProps.search_button_clicked) {
+      this.setState({ searched: false });
+    }
   }
 
   createDraggable(compType, name, path) {
