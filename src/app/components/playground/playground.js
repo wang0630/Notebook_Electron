@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Icon } from 'antd';
 import Draggable from '../darggable/draggable';
 import { saveLayout, loadLayout, deleteFile, readDir } from '../../helpers/fileOperation';
-import { linearCollisionCheck } from '../../helpers/collisionCheck';
+import { linearCollisionCheck, rTreeInsert, rTreeCollisionCheck } from '../../helpers/collisionCheck';
 import savefileRoot from '../../constant/file-system-constants';
 import './playground.scss';
 
@@ -24,7 +24,7 @@ const CloseOptions = ({ deleteIconAndFolder, hideCloseOptions }) => (
       type="danger"
       onClick={() => deleteIconAndFolder(true)}
     >
-      Delete whole folder
+      Delete content
     </Button>
     <Button
       className="playground__cancel-btn"
@@ -115,6 +115,7 @@ export default class Playground extends React.Component {
         />
       );
       finalArr.push(comp);
+      rTreeInsert(comp);
     });
     // Ready all components
     this.setState({
@@ -166,6 +167,7 @@ export default class Playground extends React.Component {
         path={path}
       />
     );
+    rTreeInsert(comp);
     this.setState(prevStat => (
       {
         exsistingComps: [...prevStat.exsistingComps, comp]
@@ -202,7 +204,9 @@ export default class Playground extends React.Component {
     console.log('before update', this.state.exsistingComps);
 
 
-    const colResult = linearCollisionCheck(this.state.exsistingComps, x, y, id);
+    // const colResult = linearCollisionCheck(this.state.exsistingComps, x, y, id);
+    const comp2 = this.state.exsistingComps.find(item => item.props.id === id);
+    const colResult = rTreeCollisionCheck(comp2, x, y, id);
 
     this.setState((prevStat) => {
       const comps = [...prevStat.exsistingComps];
@@ -224,6 +228,7 @@ export default class Playground extends React.Component {
       comp.props.name = name;
       // Clone the element, since we need to pass the metadata to the draggable every time
       comp.c = React.cloneElement(comp.c, { initX: x, initY: y, name });
+      rTreeInsert(comp);
       return {
         exsistingComps: comps
       };

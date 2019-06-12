@@ -1,4 +1,4 @@
-import rTree from 'rTree';
+import rTree from 'rtree';
 import { moveFile } from './fileOperation';
 
 const myRTree = rTree(10);
@@ -29,7 +29,6 @@ export function linearCollisionCheck(componentArr, x, y, moveID) {
   componentArr.forEach((item) => {
     if (item.props.id !== moveID) {
       if (Math.abs(item.props.x - x) <= width && Math.abs(item.props.y - y) <= height) {
-        console.log('collision!');
         if (item.props.compType === 'new-dir') {
           const comp = componentArr.find(tmp => tmp.props.id === moveID);
           moveFile(`${comp.props.path}${comp.props.name}`, `${item.props.path}${item.props.name}/${comp.props.name}`);
@@ -45,6 +44,13 @@ export function linearCollisionCheck(componentArr, x, y, moveID) {
 
 // R tree optimization here heheXD
 
+/**
+ * A function that inserts a component into
+ * the R-Tree for collision detection.
+ *
+ * @param {object} comp
+ *  The draggable component in playground.
+ */
 export function rTreeInsert(comp) {
   myRTree.insert({
     x: comp.props.x,
@@ -54,6 +60,13 @@ export function rTreeInsert(comp) {
   }, comp);
 }
 
+/**
+ * A function that removes a component from
+ * the R-Tree for collision detection.
+ *
+ * @param {object} comp
+ *  The draggable component in playground.
+ */
 export function rTreeDelete(comp) {
   myRTree.remove({
     x: comp.props.x,
@@ -63,8 +76,38 @@ export function rTreeDelete(comp) {
   }, comp);
 }
 
-export function rTreeCollisionCheck(comp) {
-  console.log('R-TREEEEEEEEEEEEEEEEEEEEEEEEEEEEE');
-  const nearbyObj = RTree.search(comp.props.x, comp.props.y, width, height);
-  colResult = linearCollisionCheck(nearbyObj, comp.props.x, comp.props.y, comp.props.id);
+/**
+ * A function that checks for collision with
+ * a given component.
+ *
+ * @param {object} comp
+ *  The draggable component in playground to
+ *  be checked.
+ */
+export function rTreeCollisionCheck(comp, x, y, moveID) {
+  let nearbyObj = [];
+  let result = 0;
+  // nearbyObj = myRTree.search({
+  //   x: comp.props.x,
+  //   y: comp.props.y,
+  //   w: width,
+  //   h: height
+  // });
+  nearbyObj = myRTree.bbox([x - 50, y - 50], [x + 80, y + 80]);
+  console.log('nearby : ', nearbyObj);
+  nearbyObj.forEach((item) => {
+    if (item.props.id !== moveID) {
+      if (Math.abs(item.props.x - x) <= width && Math.abs(item.props.y - y) <= height) {
+        if (item.props.compType === 'new-dir') {
+          moveFile(`${comp.props.path}${comp.props.name}`, `${item.props.path}${item.props.name}/${comp.props.name}`);
+          result = 1;
+        } else {
+          result = 2;
+        }
+      }
+    }
+  });
+  // Checkpoint
+  rTreeDelete(comp);
+  return result;
 }
