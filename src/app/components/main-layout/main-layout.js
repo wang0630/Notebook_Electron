@@ -10,7 +10,7 @@ export default class MainLayout extends React.Component {
     this.state = {
       shouldCreateDraggable: false,
       cbWidth: 0,
-      search_button_clicked: false
+      search_button_clicked: false,
     };
     this.createDraggable = this.createDraggable.bind(this);
     this.clearShouldCreateDraggable = this.clearShouldCreateDraggable.bind(this);
@@ -18,9 +18,9 @@ export default class MainLayout extends React.Component {
     this.flipSearch = this.flipSearch.bind(this);
   }
 
-  createDraggable(compType, compName) {
+  createDraggable(compType, folderPath = '') {
     // create a draggable inside the playground
-    this.setState({ shouldCreateDraggable: true, compType, compName });
+    this.setState({ shouldCreateDraggable: true, compType, folderPath });
   }
 
   clearShouldCreateDraggable() {
@@ -50,9 +50,9 @@ export default class MainLayout extends React.Component {
           shouldCreateDraggable={this.state.shouldCreateDraggable}
           clearShouldCreateDraggable={this.clearShouldCreateDraggable}
           compType={this.state.compType}
-          compName={this.state.compName}
           cbWidth={this.state.cbWidth}
-          search_button_clicked = {this.state.search_button_clicked}
+          folderPath={this.state.folderPath}
+          search_button_clicked={this.state.search_button_clicked}
         />
       </section>
     );

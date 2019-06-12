@@ -26,7 +26,7 @@ export default class Draggable extends React.Component {
     this.onMouseLeave = this.onMouseLeave.bind(this);
     this.onCloseClick = this.onCloseClick.bind(this);
     this.updateName = this.updateName.bind(this);
-    this.updatePlaygroundLayout = this.updatePlaygroundLayout.bind(this);
+    this.updatePlaygroundLayout = this.updatePlaygroundLayout.bind(this); 
     this.nodeRef = React.createRef();
     this.id = this.props.id;
   }
@@ -217,6 +217,10 @@ export default class Draggable extends React.Component {
     }
   }
 
+  openNotesSelector() {
+
+  }
+
   render() {
     const style = {
       position: 'absolute',
@@ -231,6 +235,7 @@ export default class Draggable extends React.Component {
         tabIndex={-1}
         style={style}
         ref={this.nodeRef}
+        onDoubleClick={this.props.showNotesSelector}
         onMouseDown={this.onMouseDown}
         onMouseMove={this.onMouseMove}
         onMouseUp={this.onMouseUp}
@@ -239,7 +244,6 @@ export default class Draggable extends React.Component {
           // Don't get focus when input is focused
           if (e.target.tagName !== 'INPUT') {
             this.setState({ clicked: true });
-            console.log('weeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
           }
         }}
         onBlur={() => { this.setState({ clicked: false }); }}

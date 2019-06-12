@@ -1,27 +1,35 @@
+@mixin window($bgcolor, $which, $tp) {
+  position: absolute;
+  // placed center
+  top: 40%;
+  left: 35%;
+  width: 30%;
+  height: 20%;
+  background-color: $bgcolor;
+  border-radius: 10px;
+  display: grid;
+  @if $which == 'close' {
+    grid-template-areas: $tp;
+  } @else if $which == 'notes-selector' {
+    grid-template-columns: $tp;
+  }
+  justify-items: center;
+  align-items: center;
+
+  padding: 20px;
+}
+
+
 .playground {
   position: relative;
   height: 100vh;
   &__close {
-    position: absolute;
-    // placed center
-    top: 40%;
-    left: 35%;
-    width: 30%;
-    height: 20%;
-
-    border: 3px solid #21946e;
-    border-radius: 10px;
-    display: grid;
-    grid-template-areas: 'p p p' 'btn1 btn2 cancel';
-    justify-items: center;
-    align-items: center;
-
-    padding: 20px;
+    @include window(#21946e, 'close', 'p p p' 'btn1 btn2 cancel');
   }
 
   &__warning {
     grid-area: p;
-    color: green;
+    color: white;
   }
 
   &__btn--1 {
@@ -34,5 +42,10 @@
 
   &__cancel-btn {
     grid-area: cancel;
+  }
+
+
+  &__notes-selector {
+    @include window(#FFE384, 'notes-selector', repeat(auto-fill, minmax(100px, 1fr)));
   }
 }

@@ -5,6 +5,43 @@ import { saveLayout, loadLayout, deleteFile } from '../../helpers/fileOperation'
 import savefileRoot from '../../constant/file-system-constants';
 import './playground.scss';
 
+
+const CloseOptions = ({ deleteIconAndFolder, hideCloseOptions }) => (
+  <div className="playground__close">
+    <p className="playground__warning">
+      Do you want to remove icon or the whole folder?
+    </p>
+    <Button
+      className="playground__btn--1"
+      type="primary"
+      onClick={deleteIconAndFolder}
+    >
+      Only remove icon
+    </Button>
+    <Button
+      className="playground__btn--2"
+      type="danger"
+      onClick={() => deleteIconAndFolder(true)}
+    >
+      Delete whole folder
+    </Button>
+    <Button
+      className="playground__cancel-btn"
+      type="dashed"
+      onClick={hideCloseOptions}
+    >
+      Cancel
+    </Button>
+  </div>
+);
+
+
+const NoteSelector = () => (
+  <div className="playground__notes-selector">
+    hello
+  </div>
+);
+
 export default class Playground extends React.Component {
   constructor(props) {
     super(props);
@@ -13,6 +50,7 @@ export default class Playground extends React.Component {
       exsistingComps: [],
       searchedComps: [],
       showClose: false,
+      showNotes: false,
       searched: false
     };
     this.updateLayout = this.updateLayout.bind(this);
@@ -20,6 +58,8 @@ export default class Playground extends React.Component {
     this.hideCloseOptions = this.hideCloseOptions.bind(this);
     this.deleteIconAndFolder = this.deleteIconAndFolder.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.getFolderName = this.getFolderName.bind(this);
+    this.showNotesSelector = this.showNotesSelector.bind(this);
     this.componentCount = 0;
     this.nodeRef = React.createRef();
   }
@@ -40,7 +80,6 @@ export default class Playground extends React.Component {
       // Create the props map
       comp.props = {
         compType: item.compType,
-        compName: item.compName,
         x: item.x,
         y: item.y,
         id: item.id,
@@ -59,6 +98,7 @@ export default class Playground extends React.Component {
           compType={item.compType}
           updateLayout={this.updateLayout}
           showCloseOptions={this.showCloseOptions}
+          showNotesSelector={this.showNotesSelector}
           initX={item.x}
           initY={item.y}
         />
@@ -80,12 +120,13 @@ export default class Playground extends React.Component {
       // Create the props map
       comp.props = {
         compType: this.props.compType,
-        compName: this.props.compName,
-        name: 'yeenit',
+        name: this.props.folderPath ? this.getFolderName() : '',
         x: INITX,
         y: INITY,
         id: this.componentCount,
-        path: `${savefileRoot}`, // Path without the name of this file. Put /name behind this
+        // savefileRoot is the path without the name of this file. Put /name behind this
+        // If this.props.folderPath is not empty, meaning that it is an existing folder
+        path: this.props.folderPath ? this.props.folderPath : `${savefileRoot}`,
       };
       // Create the init style of the component
       comp.c = (
@@ -98,8 +139,10 @@ export default class Playground extends React.Component {
           compType={this.props.compType}
           updateLayout={this.updateLayout}
           showCloseOptions={this.showCloseOptions}
+          showNotesSelector={this.showNotesSelector}
           initX={INITX}
           initY={INITY}
+          name={comp.props.name}
         />
       );
       // Update the state
@@ -111,6 +154,11 @@ export default class Playground extends React.Component {
         console.log(this.componentCount);
       });
     }
+  }
+
+  getFolderName() {
+    const fullPathArr = this.props.folderPath.split('/');
+    return fullPathArr[fullPathArr.length - 1];
   }
 
   // It is called when onMouseUp event is fired in draggable
@@ -143,6 +191,10 @@ export default class Playground extends React.Component {
 
   hideCloseOptions() {
     this.setState({ idToBeDeleted: null, showClose: false });
+  }
+
+  showNotesSelector() {
+    this.setState({ showNotes: true });
   }
 
   deleteIconAndFolder(deleteFolder = null) {
@@ -219,7 +271,6 @@ export default class Playground extends React.Component {
     let r = [];
     if (!this.state.searched) {
       r = this.state.exsistingComps.map(comp => comp.c);
-      console.log('inside render: ', r);
     } else {
       r = this.state.searchedComps.map(comp => comp.c);
       // console.log('search');
@@ -230,39 +281,21 @@ export default class Playground extends React.Component {
         {
           this.state.showClose
             ? (
-              <div className="playground__close">
-                <p className="playground__warning">
-                  Do you want to remove icon or the whole folder?
-                </p>
-                <Button
-                  className="playground__btn--1"
-                  type="primary"
-                  onClick={this.deleteIconAndFolder}
-                  ghost
-                >
-                  Only remove icon
-                </Button>
-                <Button
-                  className="playground__btn--2"
-                  type="danger"
-                  onClick={() => this.deleteIconAndFolder(true)}
-                  ghost
-                >
-                  Delete whole folder
-                </Button>
-                <Button
-                  className="playground__cancel-btn"
-                  type="dashed"
-                  onClick={this.hideCloseOptions}
-                  ghost
-                >
-                  Cancel
-                </Button>
-              </div>
+              <CloseOptions
+                deleteIconAndFolder={this.deleteIconAndFolder}
+                hideCloseOptions={this.hideCloseOptions}
+              />
             )
             : null
         }
-        {this.props.search_button_clicked == true? <input type="text" className="input" onChange={this.handleChange} placeholder="Search..." />:null}
+        {
+          this.state.showNotes
+            ? (
+              <NoteSelector />
+            )
+            : null
+        }
+        {this.props.search_button_clicked ? <input type="text" className="input" onChange={this.handleChange} placeholder="Search..." /> : null}
       </section>
     );
   }

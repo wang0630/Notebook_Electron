@@ -1,10 +1,9 @@
 import React from 'react';
 import { Button } from 'antd';
-// import { remote } from 'electron';
+import { remote } from 'electron';
 import './components-bar.scss';
 
-// const { dialog } = remote;
-const { dialog } = require('electron').remote;
+const { dialog } = remote;
 
 const componentsList = [
   {
@@ -21,7 +20,7 @@ const componentsList = [
   },
   {
     value: 'open-folder',
-    name: 'open folder'
+    name: 'open existing folder'
   }
 ];
 
@@ -38,6 +37,18 @@ export default class ComponentsBar extends React.Component {
   componentDidMount() {
     // Pass the width to main-layout
     this.props.getComponentBarWidth(this.nodeRef.current.offsetWidth);
+    this.openDialogToGetFolder = this.openDialogToGetFolder.bind(this);
+  }
+
+  openDialogToGetFolder() {
+    dialog.showOpenDialog(null, { properties: ['openFile', 'openDirectory'] }, (fileName) => {
+      if (fileName) {
+        console.log('In dialog: ', fileName[0]);
+        this.props.createDraggable('new-dir', fileName[0]);
+      } else {
+        console.log('no file');
+      }
+    });
   }
 
   createButtons() {
@@ -52,17 +63,11 @@ export default class ComponentsBar extends React.Component {
               break;
             }
             case 'open-folder': {
-              dialog.showOpenDialog(null, { properties: ['openFile', 'openDirectory'] }, (fileName) => {
-                if (fileName) {
-                  console.log('In dialog: ', fileName);
-                } else {
-                  console.log('no file');
-                }
-              });
+              this.openDialogToGetFolder();
               break;
             }
             default: {
-              this.props.createDraggable(item.value, item.name);
+              this.props.createDraggable(item.value);
             }
           }
         }}
