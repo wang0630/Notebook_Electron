@@ -44,7 +44,7 @@ export default class ComponentsBar extends React.Component {
     dialog.showOpenDialog(null, { properties: ['openFile', 'openDirectory'] }, (fileName) => {
       if (fileName) {
         console.log('In dialog: ', fileName[0]);
-        this.props.createDraggable('new-dir', fileName[0]);
+        this.props.createDraggable('new-dir', `${fileName[0]}/`);
       } else {
         console.log('no file');
       }

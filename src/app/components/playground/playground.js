@@ -67,6 +67,9 @@ export default class Playground extends React.Component {
     this.showNotesSelector = this.showNotesSelector.bind(this);
     this.createNotesIcons = this.createNotesIcons.bind(this);
     this.createDraggable = this.createDraggable.bind(this);
+    this.createFromPlayground = this.createFromPlayground.bind(this);
+    this.createBrandNew = this.createBrandNew.bind(this);
+    this.createFromExisting = this.createFromExisting.bind(this);
     this.componentCount = 0;
     this.nodeRef = React.createRef();
   }
@@ -124,7 +127,7 @@ export default class Playground extends React.Component {
     }
   }
 
-  createDraggable(compType = this.props.compType, name = this.props.folderPath ? this.getFolderName() : '') {
+  createDraggable(compType, name = this.props.folderPath ? this.getFolderName() : '') {
     const INITX = 300;
     const INITY = 300;
     // Create a new element
@@ -167,15 +170,27 @@ export default class Playground extends React.Component {
     });
   }
 
+  createFromPlayground() {
+
+  }
+
+  createBrandNew() {
+    this.createDraggable();
+  }
+
+  createFromExisting() {
+
+  }
+
   getFolderName() {
     const fullPathArr = this.props.folderPath.split('/');
-    return fullPathArr[fullPathArr.length - 1];
+    return fullPathArr[fullPathArr.length - 2];
   }
 
   // It is called when onMouseUp event is fired in draggable
   updateLayout({ x, y, name, id }) {
     console.log('before update', this.state.exsistingComps);
-    readDir('./savefiles/folder');
+
 
     const colResult = linearCollisionCheck(this.state.exsistingComps, x, y, id);
 
@@ -264,21 +279,26 @@ export default class Playground extends React.Component {
       const notes = readDir(this.state.folderPathToOpen);
       const notesComp = notes.map(item => (
         <div
-          key={item}
+          key={item.item}
           className="playground__notes-selector__container"
           onDoubleClick={() => {
-            this.createDraggable('text-area', item);
-            this.setState({ showNotes: false, folderPathToOpen: '' });
+            if (item.isDir) {
+              console.log('dir: ', this.state.folderPathToOpen);
+              this.setState(prevStat => ({ folderPathToOpen: `${prevStat.folderPathToOpen}${item.item}/` }));
+            } else {
+              this.createDraggableFromPlayground('text-area', item.item);
+              this.setState({ showNotes: false, folderPathToOpen: '' });
+            }
           }}
         >
           <Icon
-            type="form"
+            type={item.isDir ? 'folder-add' : 'form'}
             style={{
               fontSize: '20px',
             }}
           />
           <span className="playground__notes-selector__name">
-            { item }
+            { item.item }
           </span>
         </div>
       ));
