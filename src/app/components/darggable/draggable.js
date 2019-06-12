@@ -234,18 +234,6 @@ export default class Draggable extends React.Component {
     }
   }
 
-  openNote(fileName) {
-    return (
-      <TextEditor
-        onCloseClick={this.onCloseClick}
-        filename={fileName}
-        updateName={this.updateName}
-        onFocus={this.onEditorFocus}
-        lostFocus={this.lostEditorFocus}
-      />
-    );
-  }
-
   render() {
     const style = {
       position: 'absolute',
