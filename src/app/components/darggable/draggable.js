@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Input } from 'antd';
+import { Icon, Input, AutoComplete } from 'antd';
 import { createDir, saveFile, renameFile } from '../../helpers/fileOperation';
 import componentsMapping from '../../constant/components-constant';
 import savefileRoot from '../../constant/file-system-constants';
@@ -11,10 +11,13 @@ export default class Draggable extends React.Component {
     super(props);
     this.state = {
       beingDragged: false,
+      beingEditting: false,
       x: this.props.initX,
       y: this.props.initY,
       relx: 0,
       rely: 0,
+      height: 0,
+      width: 0,
       isNamed: false,
       toRename: false,
       name: this.props.name,
@@ -27,6 +30,8 @@ export default class Draggable extends React.Component {
     this.onCloseClick = this.onCloseClick.bind(this);
     this.updateName = this.updateName.bind(this);
     this.updatePlaygroundLayout = this.updatePlaygroundLayout.bind(this);
+    this.onEditorFocus = this.onEditorFocus.bind(this);
+    this.lostEditorFocus = this.lostEditorFocus.bind(this);
     this.nodeRef = React.createRef();
     this.id = this.props.id;
   }
@@ -88,7 +93,7 @@ export default class Draggable extends React.Component {
   onMouseDown(e) {
     // Not left button
     e.persist();
-    if (e.button !== 0 || e.target.tagName === 'INPUT') return;
+    if (e.button !== 0 || e.target.tagName === 'INPUT' || this.state.beingEditting) return;
     console.log('In draggable mousedown');
     this.setState(prevStat => ({
       beingDragged: true,
@@ -163,6 +168,16 @@ export default class Draggable extends React.Component {
     this.props.showCloseOptions(this.id);
   }
 
+  onEditorFocus() {
+    console.log('editor is focus!!!!!!');
+    this.setState({ beingEditting: true });
+  }
+
+  lostEditorFocus() {
+    console.log('editor has lost focus!!!!!!');
+    this.setState({ beingEditting: false });
+  }
+
   displayIcon(mapping) {
     switch (mapping.type) {
       case 'text-area':
@@ -171,6 +186,8 @@ export default class Draggable extends React.Component {
             onCloseClick={this.onCloseClick}
             filename={this.state.name}
             updateName={this.updateName}
+            onFocus={this.onEditorFocus}
+            lostFocus={this.lostEditorFocus}
           />
         );
       case 'folder-add':
@@ -217,8 +234,16 @@ export default class Draggable extends React.Component {
     }
   }
 
-  openNotesSelector() {
-
+  openNote(fileName) {
+    return (
+      <TextEditor
+        onCloseClick={this.onCloseClick}
+        filename={fileName}
+        updateName={this.updateName}
+        onFocus={this.onEditorFocus}
+        lostFocus={this.lostEditorFocus}
+      />
+    );
   }
 
   render() {
@@ -235,7 +260,7 @@ export default class Draggable extends React.Component {
         tabIndex={-1}
         style={style}
         ref={this.nodeRef}
-        onDoubleClick={this.props.showNotesSelector}
+        onDoubleClick={() => { this.props.showNotesSelector(this.id); }}
         onMouseDown={this.onMouseDown}
         onMouseMove={this.onMouseMove}
         onMouseUp={this.onMouseUp}

@@ -17,7 +17,6 @@
  * saveLayout
  * loadLayout
 */
-import pathModule from 'path';
 
 const fs = require('fs-extra');
 

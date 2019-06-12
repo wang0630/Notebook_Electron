@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, Icon } from 'antd';
 import Draggable from '../darggable/draggable';
-import { saveLayout, loadLayout, deleteFile } from '../../helpers/fileOperation';
+import { saveLayout, loadLayout, deleteFile, readDir } from '../../helpers/fileOperation';
 import { linearCollisionCheck } from '../../helpers/collisionCheck';
 import savefileRoot from '../../constant/file-system-constants';
 import './playground.scss';
@@ -15,7 +15,7 @@ const CloseOptions = ({ deleteIconAndFolder, hideCloseOptions }) => (
     <Button
       className="playground__btn--1"
       type="primary"
-      onClick={deleteIconAndFolder}
+      onClick={() => deleteIconAndFolder(false)}
     >
       Only remove icon
     </Button>
@@ -37,17 +37,21 @@ const CloseOptions = ({ deleteIconAndFolder, hideCloseOptions }) => (
 );
 
 
-const NoteSelector = () => (
-  <div className="playground__notes-selector">
-    hello
-  </div>
-);
+const NoteSelector = ({ children }) => {
+  console.log(children);
+  return (
+    <div className="playground__notes-selector">
+      { children }
+    </div>
+  );
+};
 
 export default class Playground extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       idToBeDeleted: null,
+      folderPathToOpen: null,
       exsistingComps: [],
       searchedComps: [],
       showClose: false,
@@ -61,6 +65,7 @@ export default class Playground extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.getFolderName = this.getFolderName.bind(this);
     this.showNotesSelector = this.showNotesSelector.bind(this);
+    this.createNotesIcons = this.createNotesIcons.bind(this);
     this.componentCount = 0;
     this.nodeRef = React.createRef();
   }
@@ -208,20 +213,30 @@ export default class Playground extends React.Component {
     this.setState({ idToBeDeleted: null, showClose: false });
   }
 
-  showNotesSelector() {
-    this.setState({ showNotes: true });
+  showNotesSelector(id) {
+    this.setState({ showNotes: true }, () => {
+      let path = '';
+      for (let i = 0; i < this.state.exsistingComps.length; i += 1) {
+        if (id === this.state.exsistingComps[i].props.id) {
+          console.log('find it');
+          ({ path } = this.state.exsistingComps[i].props);
+          break;
+        }
+      }
+      this.setState({ folderPathToOpen: path });
+    });
   }
 
-  deleteIconAndFolder(deleteFolder = null) {
+  deleteIconAndFolder(deleteContent) {
     this.setState((prevStat) => {
       const comps = [...prevStat.exsistingComps];
       // Find the right component according to id
       let i;
       for (i = 0; i < comps.length; i += 1) {
         if (comps[i].props.id === prevStat.idToBeDeleted) {
-          if (deleteFolder) {
-            // put your function here
+          if (deleteContent) { // put your function here
             deleteFile(`${comps[i].props.path}/${comps[i].props.name}`);
+            console.log('inside');
           }
           break;
         }
@@ -236,6 +251,33 @@ export default class Playground extends React.Component {
     }, () => {
       saveLayout(this.state.exsistingComps, this.componentCount);
     });
+  }
+
+  createNotesIcons() {
+    if (this.state.folderPathToOpen) {
+      const notes = readDir(this.state.folderPathToOpen);
+      const notesComp = notes.map(item => (
+        <div
+          key={item}
+          className="playground__notes-selector__container"
+          onDoubleClick={() => {
+            console.log('here');
+          }}
+        >
+          <Icon
+            type="form"
+            style={{
+              fontSize: '20px',
+            }}
+          />
+          <span className="playground__notes-selector__name">
+            { item }
+          </span>
+        </div>
+      ));
+      return notesComp;
+    }
+    return null;
   }
 
   handleChange(e) {
@@ -288,7 +330,6 @@ export default class Playground extends React.Component {
       r = this.state.exsistingComps.map(comp => comp.c);
     } else {
       r = this.state.searchedComps.map(comp => comp.c);
-      // console.log('search');
     }
     return (
       <section className="playground" ref={this.nodeRef}>
@@ -306,7 +347,9 @@ export default class Playground extends React.Component {
         {
           this.state.showNotes
             ? (
-              <NoteSelector />
+              <NoteSelector>
+                { this.createNotesIcons() }
+              </NoteSelector>
             )
             : null
         }
