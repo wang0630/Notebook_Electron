@@ -75,7 +75,7 @@ export function createDir(dir) {
  */
 export function readDir(dir) {
   let ret = [];
-  if (fs.existsSync(dir)) {
+  if (!fs.existsSync(dir)) {
     alert('[ERROR] The given directory does not exist.');
   }
   try {

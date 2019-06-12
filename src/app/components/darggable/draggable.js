@@ -26,7 +26,7 @@ export default class Draggable extends React.Component {
     this.onMouseLeave = this.onMouseLeave.bind(this);
     this.onCloseClick = this.onCloseClick.bind(this);
     this.updateName = this.updateName.bind(this);
-    this.updatePlaygroundLayout = this.updatePlaygroundLayout.bind(this); 
+    this.updatePlaygroundLayout = this.updatePlaygroundLayout.bind(this);
     this.nodeRef = React.createRef();
     this.id = this.props.id;
   }
