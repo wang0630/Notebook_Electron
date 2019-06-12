@@ -1,8 +1,9 @@
 import { moveFile } from './fileOperation';
+// import rTree from 'rTree';
 
+// let myRTree = RTree(10);
 const width = 90;
 const height = 100;
-
 
 /**
  * A function that checks for collision in
@@ -42,6 +43,17 @@ export function linearCollisionCheck(componentArr, x, y, moveID) {
   return result;
 }
 
-export function whyAmIHere() {
-  console.log('yee');
-}
+// R tree optimization here heheXD
+
+// export function rTreeInsert(comp) {
+//   myRTree.insert({
+//     x: comp.props.x,
+//     y: comp.props.y,
+//     w: width,
+//     h: height
+//   }, comp);
+// }
+
+// export function rTreeCollision() {
+//   console.log('R-TREEEEEEEEEEEEEEEEEEEEEEEEEEEEE');
+// }

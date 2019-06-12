@@ -70,15 +70,28 @@ export function createDir(dir) {
  *  The directory to be created. The path should start
  *  from root of this project.
  * @return {array}
- *  A string array containing the filenames in the directory.
+ *  An object array. Each object contains the filename
+ *  and an boolean value indicating whether the file is
+ *  a directory or not.
  */
 export function readDir(dir) {
-  let ret = [];
+  let arr = []; // array of filenames
+  const ret = []; // the return array of objects
   if (!fs.existsSync(dir)) {
     alert('[ERROR] The given directory does not exist.');
   }
   try {
-    ret = fs.readdirSync(dir);
+    arr = fs.readdirSync(dir);
+    arr.forEach((item) => {
+      let isDir;
+      if (fs.lstatSync(`${dir}/${item}`).isDirectory()) {
+        isDir = true;
+      } else {
+        isDir = false;
+      }
+      const obj = { item, isDir };
+      ret.push(obj);
+    });
   } catch (e) {
     alert('[ERROR] Failed reading directory.');
   }

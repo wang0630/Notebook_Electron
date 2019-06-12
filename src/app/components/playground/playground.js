@@ -170,6 +170,7 @@ export default class Playground extends React.Component {
   // It is called when onMouseUp event is fired in draggable
   updateLayout({ x, y, name, id }) {
     console.log('before update', this.state.exsistingComps);
+    readDir('./savefiles/folder');
 
     const colResult = linearCollisionCheck(this.state.exsistingComps, x, y, id);
 
