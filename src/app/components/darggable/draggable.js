@@ -61,16 +61,6 @@ export default class Draggable extends React.Component {
       this.setState({
         isNamed: true,
         name: newName,
-<<<<<<< HEAD
-      }, () => this.updatePlaygroundLayout());
-      if (this.props.compType === 'new-dir') {
-        createDir(`${savefileRoot}${newName}`);
-      } else if (this.props.compType === 'new-note') {
-        // Create a empty file
-        saveFile(`${newName}`, '');
-        // Open ur cuuuuuute little text area here weeeeeeeeeeeeeeee
-      }
-=======
       }, () => {
         this.updatePlaygroundLayout();
         if (this.props.compType === 'new-dir') {
@@ -92,7 +82,6 @@ export default class Draggable extends React.Component {
           // Open ur cuuuuuute little text area here weeeeeeeeeeeeeeee
         }
       });
->>>>>>> refs/remotes/origin/master
     }
   }
 

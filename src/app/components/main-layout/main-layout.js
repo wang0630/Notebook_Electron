@@ -31,9 +31,10 @@ export default class MainLayout extends React.Component {
     this.setState({ cbWidth: width });
   }
 
-  flipSearch(){
-    this.setState({ search_button_clicked: !this.state.search_button_clicked});
-    console.log(this.state.search_button_clicked);
+  flipSearch() {
+    this.setState(prevStat => ({
+      search_button_clicked: !prevStat.search_button_clicked
+    }));
   }
 
   render() {

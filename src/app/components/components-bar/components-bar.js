@@ -1,6 +1,10 @@
 import React from 'react';
 import { Button } from 'antd';
+// import { remote } from 'electron';
 import './components-bar.scss';
+
+// const { dialog } = remote;
+const { dialog } = require('electron').remote;
 
 const componentsList = [
   {
@@ -14,6 +18,10 @@ const componentsList = [
   {
     value: 'search-bar',
     name: 'search bar'
+  },
+  {
+    value: 'open-folder',
+    name: 'open folder'
   }
 ];
 
@@ -38,11 +46,24 @@ export default class ComponentsBar extends React.Component {
         type="primary"
         key={item.value}
         onClick={() => {
-          if(item.name != 'search bar'){
-            this.props.createDraggable(item.value, item.name);
-          }
-          else{
-            this.props.flipSearch();
+          switch (item.value) {
+            case 'search-bar': {
+              this.props.flipSearch();
+              break;
+            }
+            case 'open-folder': {
+              dialog.showOpenDialog(null, { properties: ['openFile', 'openDirectory'] }, (fileName) => {
+                if (fileName) {
+                  console.log('In dialog: ', fileName);
+                } else {
+                  console.log('no file');
+                }
+              });
+              break;
+            }
+            default: {
+              this.props.createDraggable(item.value, item.name);
+            }
           }
         }}
       >
