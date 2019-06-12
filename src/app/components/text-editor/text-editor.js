@@ -88,6 +88,8 @@ export default class TextArea extends React.Component {
           onChange={(content) => {
             this.textChange(content);
           }}
+          onFocus={this.props.onFocus}
+          onBlur={this.props.lostFocus}
         />
         <Icon
           type="close-circle"
