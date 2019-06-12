@@ -260,6 +260,7 @@ export default class Draggable extends React.Component {
         tabIndex={-1}
         style={style}
         ref={this.nodeRef}
+        onDoubleClick={() => { this.props.showNotesSelector(this.id); }}
         onMouseDown={this.onMouseDown}
         onMouseMove={this.onMouseMove}
         onMouseUp={this.onMouseUp}
