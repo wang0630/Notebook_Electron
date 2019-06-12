@@ -14,6 +14,7 @@ export default class MainLayout extends React.Component {
     };
     this.createDraggable = this.createDraggable.bind(this);
     this.clearShouldCreateDraggable = this.clearShouldCreateDraggable.bind(this);
+    this.setComponentBarWidth = this.setComponentBarWidth.bind(this);
     this.getComponentBarWidth = this.getComponentBarWidth.bind(this);
     this.flipSearch = this.flipSearch.bind(this);
   }
@@ -27,8 +28,12 @@ export default class MainLayout extends React.Component {
     this.setState({ shouldCreateDraggable: false });
   }
 
-  getComponentBarWidth(width) {
+  setComponentBarWidth(width) {
     this.setState({ cbWidth: width });
+  }
+
+  getComponentBarWidth() {
+    return this.state.cbWidth;
   }
 
   flipSearch() {
@@ -43,14 +48,14 @@ export default class MainLayout extends React.Component {
         <ComponentsBar
           clearisDragging={this.clearisDragging}
           createDraggable={this.createDraggable}
-          getComponentBarWidth={this.getComponentBarWidth}
+          setComponentBarWidth={this.setComponentBarWidth}
           flipSearch={this.flipSearch}
         />
         <Playground
           shouldCreateDraggable={this.state.shouldCreateDraggable}
           clearShouldCreateDraggable={this.clearShouldCreateDraggable}
           compType={this.state.compType}
-          cbWidth={this.state.cbWidth}
+          getCBWidth={this.getComponentBarWidth}
           folderPath={this.state.folderPath}
           search_button_clicked={this.state.search_button_clicked}
         />

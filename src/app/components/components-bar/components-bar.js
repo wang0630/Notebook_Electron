@@ -29,7 +29,7 @@ export default class ComponentsBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: 'true',
+      show: true,
     };
     this.nodeRef = React.createRef();
     this.createButtons = this.createButtons.bind(this);
@@ -37,8 +37,9 @@ export default class ComponentsBar extends React.Component {
 
   componentDidMount() {
     // Pass the width to main-layout
-    this.props.getComponentBarWidth(this.nodeRef.current.offsetWidth);
+    this.props.setComponentBarWidth(this.nodeRef.current.offsetWidth);
     this.openDialogToGetFolder = this.openDialogToGetFolder.bind(this);
+    this.nodeRef.current.style.transform = 'translateX(-96%)';
   }
 
   openDialogToGetFolder() {
@@ -81,13 +82,27 @@ export default class ComponentsBar extends React.Component {
 
   render() {
     return (
-      this.state.show
-        ? (
-          <div className="components-bar" ref={this.nodeRef}>
-            { this.createButtons() }
-          </div>
-        )
-        : null
+      <div
+        className="components-bar"
+        ref={this.nodeRef}
+        onFocus={() => {}}
+        onMouseOver={() => {
+          if (this.state.show) {
+            this.nodeRef.current.style.transform = 'translateX(0%)';
+            this.props.setComponentBarWidth(this.nodeRef.current.offsetWidth);
+            this.setState({ show: false });
+          }
+        }}
+        onMouseLeave={() => {
+          if (!this.state.show) {
+            this.nodeRef.current.style.transform = 'translateX(-96%)';
+            this.props.setComponentBarWidth(this.nodeRef.current.offsetWidth * 0.04);
+            this.setState({ show: true });
+          }
+        }}
+      >
+        { this.createButtons() }
+      </div>
     );
   }
 }

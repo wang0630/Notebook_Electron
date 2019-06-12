@@ -102,7 +102,7 @@ export default class Playground extends React.Component {
           id={item.id}
           key={item.id}
           name={item.name}
-          cbWidth={this.props.cbWidth}
+          getCBWidth={this.props.getCBWidth}
           rightBound={this.nodeRef.current.offsetWidth}
           bottomBound={this.nodeRef.current.offsetHeight}
           compType={item.compType}
@@ -153,7 +153,7 @@ export default class Playground extends React.Component {
       <Draggable
         id={this.componentCount}
         key={this.componentCount}
-        cbWidth={this.props.cbWidth}
+        getCBWidth={this.props.getCBWidth}
         rightBound={this.nodeRef.current.offsetWidth}
         bottomBound={this.nodeRef.current.offsetHeight}
         compType={compType}

@@ -96,7 +96,7 @@ export default class Draggable extends React.Component {
     console.log('In draggable mousedown');
     this.setState(prevStat => ({
       beingDragged: true,
-      relx: e.pageX - prevStat.x - this.props.cbWidth,
+      relx: e.pageX - prevStat.x - this.props.getCBWidth(),
       rely: e.pageY - prevStat.y
     }));
   }
@@ -107,11 +107,11 @@ export default class Draggable extends React.Component {
     if (this.state.beingDragged) {
       e.persist();
       this.setState((prevStat) => {
-        let currentX = e.pageX - this.props.cbWidth - prevStat.relx;
+        let currentX = e.pageX - this.props.getCBWidth() - prevStat.relx;
         let currentY = e.pageY - prevStat.rely;
         // If the position is out of bound
         // left
-        if (this.nodeRef.current.offsetLeft <= 10) {
+        if (this.nodeRef.current.offsetLeft <= -220) {
           if (currentX < prevStat.x) {
             currentX = prevStat.x;
           }
