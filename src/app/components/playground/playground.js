@@ -66,6 +66,7 @@ export default class Playground extends React.Component {
     this.getFolderName = this.getFolderName.bind(this);
     this.showNotesSelector = this.showNotesSelector.bind(this);
     this.createNotesIcons = this.createNotesIcons.bind(this);
+    this.createDraggable = this.createDraggable.bind(this);
     this.componentCount = 0;
     this.nodeRef = React.createRef();
   }
@@ -117,49 +118,61 @@ export default class Playground extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevStat) {
+  componentDidUpdate(prevProps) {
     if (this.props.shouldCreateDraggable && !prevProps.shouldCreateDraggable) {
-      const INITX = 300;
-      const INITY = 300;
-      // Create a new element
-      const comp = {};
-      // Create the props map
-      comp.props = {
-        compType: this.props.compType,
-        name: this.props.folderPath ? this.getFolderName() : '',
-        x: INITX,
-        y: INITY,
-        id: this.componentCount,
-        // savefileRoot is the path without the name of this file. Put /name behind this
-        // If this.props.folderPath is not empty, meaning that it is an existing folder
-        path: this.props.folderPath ? this.props.folderPath : `${savefileRoot}`,
-      };
-      // Create the init style of the component
-      comp.c = (
-        <Draggable
-          id={this.componentCount}
-          key={this.componentCount}
-          cbWidth={this.props.cbWidth}
-          rightBound={this.nodeRef.current.offsetWidth}
-          bottomBound={this.nodeRef.current.offsetHeight}
-          compType={this.props.compType}
-          updateLayout={this.updateLayout}
-          showCloseOptions={this.showCloseOptions}
-          showNotesSelector={this.showNotesSelector}
-          initX={INITX}
-          initY={INITY}
-          name={comp.props.name}
-        />
-      );
-      // Update the state
-      this.setState({
-        exsistingComps: [...prevStat.exsistingComps, comp]
-      }, () => {
-        this.props.clearShouldCreateDraggable();
-        this.componentCount += 1;
-        console.log(this.componentCount);
-      });
+      this.createDraggable();
     }
+  }
+
+  createDraggable(compType = this.props.compType, name = this.props.folderPath ? this.getFolderName() : '') {
+    const INITX = 300;
+    const INITY = 300;
+    // Create a new element
+    const comp = {};
+    // Create the props map
+    comp.props = {
+      compType: this.props.compType,
+      name,
+      x: INITX,
+      y: INITY,
+      id: this.componentCount,
+      // savefileRoot is the path without the name of this file. Put /name behind this
+      // If this.props.folderPath is not empty, meaning that it is an existing folder
+      path: this.props.folderPath ? this.props.folderPath : `${savefileRoot}`,
+    };
+    // Create the init style of the component
+    comp.c = (
+      <Draggable
+        id={this.componentCount}
+        key={this.componentCount}
+        cbWidth={this.props.cbWidth}
+        rightBound={this.nodeRef.current.offsetWidth}
+        bottomBound={this.nodeRef.current.offsetHeight}
+        compType={compType}
+        updateLayout={this.updateLayout}
+        showCloseOptions={this.showCloseOptions}
+        showNotesSelector={this.showNotesSelector}
+        initX={INITX}
+        initY={INITY}
+        name={comp.props.name}
+      />
+    );
+    // Update the state
+    // this.setState({
+    //   exsistingComps: [...prevStat.exsistingComps, comp]
+    // }, () => {
+    //   this.props.clearShouldCreateDraggable();
+    //   this.componentCount += 1;
+    //   console.log(this.componentCount);
+    // });
+    this.setState(prevStat => (
+      {
+        exsistingComps: [...prevStat.exsistingComps, comp]
+      }
+    ), () => {
+      this.props.clearShouldCreateDraggable();
+      this.componentCount += 1;
+    });
   }
 
   getFolderName() {
@@ -262,7 +275,7 @@ export default class Playground extends React.Component {
           key={item}
           className="playground__notes-selector__container"
           onDoubleClick={() => {
-            console.log('here');
+            this.createDraggable('text-area', item);
           }}
         >
           <Icon
