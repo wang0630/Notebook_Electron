@@ -1,7 +1,7 @@
+import rTree from 'rTree';
 import { moveFile } from './fileOperation';
-// import rTree from 'rTree';
 
-// let myRTree = RTree(10);
+const myRTree = rTree(10);
 const width = 90;
 const height = 100;
 
@@ -45,15 +45,26 @@ export function linearCollisionCheck(componentArr, x, y, moveID) {
 
 // R tree optimization here heheXD
 
-// export function rTreeInsert(comp) {
-//   myRTree.insert({
-//     x: comp.props.x,
-//     y: comp.props.y,
-//     w: width,
-//     h: height
-//   }, comp);
-// }
+export function rTreeInsert(comp) {
+  myRTree.insert({
+    x: comp.props.x,
+    y: comp.props.y,
+    w: width,
+    h: height
+  }, comp);
+}
 
-// export function rTreeCollision() {
-//   console.log('R-TREEEEEEEEEEEEEEEEEEEEEEEEEEEEE');
-// }
+export function rTreeDelete(comp) {
+  myRTree.remove({
+    x: comp.props.x,
+    y: comp.props.y,
+    w: width,
+    h: height
+  }, comp);
+}
+
+export function rTreeCollisionCheck(comp) {
+  console.log('R-TREEEEEEEEEEEEEEEEEEEEEEEEEEEEE');
+  const nearbyObj = RTree.search(comp.props.x, comp.props.y, width, height);
+  colResult = linearCollisionCheck(nearbyObj, comp.props.x, comp.props.y, comp.props.id);
+}
