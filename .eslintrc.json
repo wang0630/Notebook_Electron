@@ -3,6 +3,7 @@
   "extends": "airbnb",
   "rules": {
     "class-methods-use-this": "off",
+    "consistent-return": "off",
     "comma-dangle": "off",
     "import/no-extraneous-dependencies": "off",
     "linebreak-style": "off",

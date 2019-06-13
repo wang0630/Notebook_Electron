@@ -13,3 +13,8 @@ npm install
 ```bash
 npm start
 ```
+
+## Build the binary for MAC
+```bash
+npx electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true
+```

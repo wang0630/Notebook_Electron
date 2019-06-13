@@ -254,17 +254,23 @@ export default class Playground extends React.Component {
   }
 
   showNotesSelector(id) {
-    this.setState({ showNotes: true }, () => {
+    this.setState((prevStat) => {
       let path = '';
       let name = '';
-      for (let i = 0; i < this.state.exsistingComps.length; i += 1) {
-        if (id === this.state.exsistingComps[i].props.id) {
-          console.log('find it: ', this.state.exsistingComps[i]);
-          ({ path, name } = this.state.exsistingComps[i].props);
+      for (let i = 0; i < prevStat.exsistingComps.length; i += 1) {
+        if (id === prevStat.exsistingComps[i].props.id) {
+          // Note can't open this
+          if (prevStat.exsistingComps[i].props.compType !== 'new-dir') {
+            return;
+          }
+          ({ path, name } = prevStat.exsistingComps[i].props);
           break;
         }
       }
-      this.setState({ folderPathToOpen: `${path}${name}/` });
+      return {
+        showNotes: true,
+        folderPathToOpen: `${path}${name}/`
+      };
     });
   }
 

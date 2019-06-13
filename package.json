@@ -2,6 +2,7 @@
   "name": "notebook",
   "version": "1.0.0",
   "description": "Notebook made with Electron",
+  "productName": "Notebook",
   "main": "main.js",
   "scripts": {
     "start": "npm-run-all --parallel bundle serve",

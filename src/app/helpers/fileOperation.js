@@ -17,9 +17,9 @@
  * saveLayout
  * loadLayout
 */
+import savefileRoot from '../constant/file-system-constants';
 
 const fs = require('fs-extra');
-
 /**
  * A function that creates a given new directory.
  * If the directory already exists, nothing will be done.
@@ -228,8 +228,7 @@ export function renameFile(oldPath, newPath) {
  * The number of components in componentArr.
  */
 export function saveLayout(componentArr, componentCounter) {
-  // const fs = require('fs-extra');
-  console.log('save layout');
+  console.log('save layout: ', `${savefileRoot}window-layout.json`);
   const arr = [];
   componentArr.forEach((item) => {
     if (item.props.name) {
@@ -238,7 +237,7 @@ export function saveLayout(componentArr, componentCounter) {
   });
   arr.push(componentCounter);
   try {
-    fs.writeFileSync('./savefiles/window-layout.json', JSON.stringify(arr), 'utf-8');
+    fs.writeFileSync(`${savefileRoot}window-layout.json`, JSON.stringify(arr), 'utf-8');
   } catch (e) {
     alert('[WARNING] Failed saving window layout!');
   }
@@ -255,7 +254,7 @@ export function saveLayout(componentArr, componentCounter) {
 export function loadLayout() {
   // var fs = require('fs-extra');
   try {
-    const data = fs.readFileSync('./savefiles/window-layout.json', 'utf-8');
+    const data = fs.readFileSync(`${savefileRoot}window-layout.json`, 'utf-8');
     const ret = JSON.parse(data);
     console.log('The file content is : ', ret);
     return ret;

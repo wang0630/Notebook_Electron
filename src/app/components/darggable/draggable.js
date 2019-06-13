@@ -168,12 +168,10 @@ export default class Draggable extends React.Component {
   }
 
   onEditorFocus() {
-    console.log('editor is focus!!!!!!');
     this.setState({ beingEditting: true });
   }
 
   lostEditorFocus() {
-    console.log('editor has lost focus!!!!!!');
     this.setState({ beingEditting: false });
   }
 

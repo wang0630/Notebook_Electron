@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button } from 'antd';
 import { remote } from 'electron';
-import savefileRoot from '../../constant/file-system-constants';
 import './components-bar.scss';
 
 const { dialog } = remote;
